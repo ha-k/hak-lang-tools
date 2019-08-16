@@ -1,0 +1,2088 @@
+<HTML>
+<HEAD>
+<TITLE>
+GenericHilite.html
+</TITLE>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="C:/cygwin/home/hak/hlt/classes/resources/Hilite.Style.css">
+</HEAD>
+<BODY BGCOLOR="#CCCFF">
+<CENTER>
+<TABLE BGCOLOR=white WIDTH=50% BORDER=5 CELLPADDING=20>
+<TR><TD ALIGN=CENTER>
+<FONT SIZE=+5><TT><B>GenericHilite.java</B></TT></FONT>
+<P>
+</TD></TR>
+</TABLE>
+</CENTER>
+<PRE>
+<FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT><FONT COLOR="#88AA66"><EM>// PLEASE DO NOT EDIT WITHOUT THE EXPLICIT CONSENT OF THE AUTHOR! \\
+</EM></FONT><FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+<FONT COLOR="BROWN"><STRONG>package</STRONG></FONT> hlt.language.tools;
+
+
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+  This is a tool that beautifies the presentation of code.  It is meant
+  to recognize comments and format the information that they provide in
+  HTML. It may be customized for a specific syntax.
+ 
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Author:</STRONG></TD><TD>&nbsp;</TD>
+<TD><a href="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Copyright:</STRONG></TD><TD>&nbsp;</TD>
+<TD>&copy; <a href="http://www.hassan-ait-kaci.net/">by the author</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Version:</STRONG></TD><TD>&nbsp;</TD>
+<TD>Last modified on Fri Apr 13 19:42:44 2012 by hak
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.*;                       <FONT COLOR="#88AA66"><EM>// Needed, obviously...
+</EM></FONT><FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT>;               <FONT COLOR="#88AA66"><EM>// For the keywords
+</EM></FONT><FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>Properties</STRONG></FONT>;            <FONT COLOR="#88AA66"><EM>// For the configuration
+</EM></FONT><FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT>;              <FONT COLOR="#88AA66"><EM>// For table iteration
+</EM></FONT><FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>Date</STRONG></FONT>;                  <FONT COLOR="#88AA66"><EM>// For file stamping
+</EM></FONT><FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.io.<FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>;       <FONT COLOR="#88AA66"><EM>// For file names
+</EM></FONT><FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT>;     <FONT COLOR="#88AA66"><EM>// For the syntaxDoc tag definitions
+</EM></FONT>
+<FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>class</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>GenericHilite</STRONG></FONT>
+<FONT COLOR="#444444">{</FONT>
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\\
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Input file name.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> inputFileName;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Input file.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT> inputFile;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Input stream filter to allow unreading.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>PushbackReader</STRONG></FONT> input;         
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Output file name.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> outputFileName;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Target directory.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> outputDir;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    File output writer.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>BufferedWriter</STRONG></FONT> output;                
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Constructs a GenericHilite object with specified input file name, configuration
+    file name, output file name, etc...
+                       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>input&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  name of file to highlight</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>configuration&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  name of configuration file (properties)</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>output&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  name of highlighted file</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>dir&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  directory name where to write the highlighted file</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>clobber&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  if <tt>true</tt>, overwrite existing files</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>GenericHilite</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> input, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> configuration, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> output, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> dir, <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> clobber<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      inputFileName = input;                    <FONT COLOR="#88AA66"><EM>// set input
+</EM></FONT>      configurationFileName = configuration;    <FONT COLOR="#88AA66"><EM>// set configuration
+</EM></FONT>      outputFileName = output;                  <FONT COLOR="#88AA66"><EM>// set output
+</EM></FONT>      outputDir = dir;                          <FONT COLOR="#88AA66"><EM>// set target directory
+</EM></FONT>      hilite<FONT COLOR="#444444">(</FONT>clobber<FONT COLOR="#444444">)</FONT>;                          <FONT COLOR="#88AA66"><EM>// do the work
+</EM></FONT>    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Constructs a GenericHilite object with specified input file name.
+           
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>input&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  name of file to highlight</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>clobber&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  if <tt>true</tt>, overwrite existing files</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>GenericHilite</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> input, <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> clobber<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      inputFileName = input;                    <FONT COLOR="#88AA66"><EM>// set input
+</EM></FONT>      outputFileName = <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.prefix<FONT COLOR="#444444">(</FONT>input<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>".html"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// define output
+</EM></FONT>      hilite<FONT COLOR="#444444">(</FONT>clobber<FONT COLOR="#444444">)</FONT>;                          <FONT COLOR="#88AA66"><EM>// do the work
+</EM></FONT>    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Constructs a GenericHilite object with specified input file name
+    asking for confirmation before when clobbering existing files.
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>input&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  name of file to highlight</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>GenericHilite</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> input<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      inputFileName = input;                    <FONT COLOR="#88AA66"><EM>// set input
+</EM></FONT>      outputFileName = <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.prefix<FONT COLOR="#444444">(</FONT>input<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>".html"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// define output
+</EM></FONT>      hilite<FONT COLOR="#444444">(</FONT><FONT COLOR="GREEN">false</FONT><FONT COLOR="#444444">)</FONT>;                            <FONT COLOR="#88AA66"><EM>// do the work
+</EM></FONT>    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the target directory.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> dir <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>outputDir == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>""</EM></FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> outputDir;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Initiates the highlighting of the input file.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> hilite <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> clobber<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      inputFile = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT><FONT COLOR="#444444">(</FONT>inputFileName<FONT COLOR="#444444">)</FONT>;      <FONT COLOR="#88AA66"><EM>// create the file
+</EM></FONT>      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>inputFile.exists<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>                   <FONT COLOR="#88AA66"><EM>// check if the input file exists
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BROWN"><STRONG>try</STRONG></FONT>
+            <FONT COLOR="#444444">{</FONT>
+              <FONT COLOR="#88AA66"><EM>// if so, attach it to a buffered/pushback stream
+</EM></FONT>              input = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>PushbackReader</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>BufferedReader</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileReader</STRONG></FONT><FONT COLOR="#444444">(</FONT>inputFile<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="#88AA66"><EM>// create output file stream
+</EM></FONT>              <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT> outputFile = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT><FONT COLOR="#444444">(</FONT>dir<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+outputFileName<FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="#88AA66"><EM>/*start*/</EM></FONT>
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!clobber &amp;&amp; outputFile.exists<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="#88AA66"><EM>// confirm if output file exists
+</EM></FONT>                <FONT COLOR="#444444">{</FONT>
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!<FONT COLOR="#4400DD"><STRONG>Misc</STRONG></FONT>.askYesNo<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** File "</EM></FONT>+dir<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+outputFileName+
+                                     <FONT COLOR="#D2691E"><EM>" already exists; overwrite anyway"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+                    <FONT COLOR="BROWN"><STRONG>throw</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"Aborting hiliting file "</EM></FONT>+inputFileName<FONT COLOR="#444444">)</FONT>;
+                <FONT COLOR="#444444">}</FONT>
+              <FONT COLOR="#88AA66"><EM>/*end*/</EM></FONT>
+              <FONT COLOR="#88AA66"><EM>// NOTE: This following phony try/catch wrapper has no business being
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// here, BUT... with no apparent reason, the call to new FileWriter(...)
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// throws an IOException - which it doesn't if the above lines between
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// /*start...end*/ are commented out. In other words, issuing the above
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// call to outputFile.exists() (whether the output file exists or not),
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// makes the following call to new FileWriter(...) fail. If omitted,
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// Java does not complain! So this try/catch wrapper is a workaround,
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// although admittedlly as weird: it traps the exception and re-issues
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// the exact same call! Go figure... This all looks like a bona fide
+</EM></FONT>              <FONT COLOR="#88AA66"><EM>// Java 1.2 bug to me. [Tue Mar 16 1999 -hak]
+</EM></FONT>              <FONT COLOR="BROWN"><STRONG>try</STRONG></FONT>
+                <FONT COLOR="#444444">{</FONT> 
+                  output = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>BufferedWriter</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileWriter</STRONG></FONT><FONT COLOR="#444444">(</FONT>outputFile<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+                <FONT COLOR="#444444">}</FONT>
+              <FONT COLOR="BROWN"><STRONG>catch</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT> e<FONT COLOR="#444444">)</FONT>
+                <FONT COLOR="#444444">{</FONT>
+                  output = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>BufferedWriter</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileWriter</STRONG></FONT><FONT COLOR="#444444">(</FONT>outputFile<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+                <FONT COLOR="#444444">}</FONT>
+              configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;      <FONT COLOR="#88AA66"><EM>// set colors and styles
+</EM></FONT>              hiliteFile<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;     <FONT COLOR="#88AA66"><EM>// process the file
+</EM></FONT>            <FONT COLOR="#444444">}</FONT>             
+          <FONT COLOR="BROWN"><STRONG>catch</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT> e<FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** "</EM></FONT>+e.getMessage<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>    <FONT COLOR="#88AA66"><EM>// the input file is not there: beep and complain
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="#4400DD"><STRONG>Misc</STRONG></FONT>.beep<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** File "</EM></FONT>+inputFileName+<FONT COLOR="#D2691E"><EM>" not found!"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>      
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Static data definitions: keyword types and strings.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> <FONT COLOR="GREEN">MODIFIER</FONT> = <FONT COLOR="#D2691E"><EM>"modifier"</EM></FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> <FONT COLOR="GREEN">TYPE</FONT>     = <FONT COLOR="#D2691E"><EM>"type"</EM></FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> <FONT COLOR="GREEN">CONTROL</FONT>  = <FONT COLOR="#D2691E"><EM>"control"</EM></FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> <FONT COLOR="GREEN">DECLARE</FONT>  = <FONT COLOR="#D2691E"><EM>"declare"</EM></FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> <FONT COLOR="GREEN">LITERAL</FONT>  = <FONT COLOR="#D2691E"><EM>"literal"</EM></FONT>; 
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> <FONT COLOR="GREEN">OTHER</FONT>    = <FONT COLOR="#D2691E"><EM>"other"</EM></FONT>; 
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Storage for Syntax keywords (keyword -> keyword type).
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT> syntaxWords = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;   
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Stores a modifier word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> jkw_m <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> w<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      syntaxWords.put<FONT COLOR="#444444">(</FONT>w,<FONT COLOR="GREEN">MODIFIER</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Stores a type word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> jkw_t <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> w<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      syntaxWords.put<FONT COLOR="#444444">(</FONT>w,<FONT COLOR="GREEN">TYPE</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Stores a control word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> jkw_c <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> w<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      syntaxWords.put<FONT COLOR="#444444">(</FONT>w,<FONT COLOR="GREEN">CONTROL</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Stores a declaration word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> jkw_d <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> w<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      syntaxWords.put<FONT COLOR="#444444">(</FONT>w,<FONT COLOR="GREEN">DECLARE</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Stores a literal.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> jkw_l <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> w<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      syntaxWords.put<FONT COLOR="#444444">(</FONT>w,<FONT COLOR="GREEN">LITERAL</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Stores a `noneOfTheAbove'.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> jkw_o <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> w<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      syntaxWords.put<FONT COLOR="#444444">(</FONT>w,<FONT COLOR="GREEN">OTHER</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>    
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Color and style parameters to be set to the configuration values or the default.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> <FONT COLOR="GREEN">FONT_SIZE</FONT>, <FONT COLOR="GREEN">BACKGROUND_COLOR</FONT>, <FONT COLOR="GREEN">SYNTAXDOC_BG_COLOR</FONT>, <FONT COLOR="GREEN">SYNTAXDOC_TEXT_COLOR</FONT>,
+         <FONT COLOR="GREEN">COMMENT_COLOR</FONT>, <FONT COLOR="GREEN">BRACKET_COLOR</FONT>, <FONT COLOR="GREEN">KEYWORD_COLOR</FONT>, <FONT COLOR="GREEN">MODIFIER_COLOR</FONT>, <FONT COLOR="GREEN">TYPE_COLOR</FONT>,
+         <FONT COLOR="GREEN">CONTROL_COLOR</FONT>, <FONT COLOR="GREEN">DECLARE_COLOR</FONT>, <FONT COLOR="GREEN">LITERAL_COLOR</FONT>, <FONT COLOR="GREEN">OTHER_COLOR</FONT>, <FONT COLOR="GREEN">CLASS_COLOR</FONT>,
+         <FONT COLOR="GREEN">CONSTANT_COLOR</FONT>, <FONT COLOR="GREEN">NUMBER_COLOR</FONT>, <FONT COLOR="GREEN">STRING_COLOR</FONT>, <FONT COLOR="GREEN">TEXT_COLOR</FONT>, <FONT COLOR="GREEN">ANNOTATE_COLOR</FONT>,
+         <FONT COLOR="GREEN">ANNOTATE_TAG_COLOR</FONT>, <FONT COLOR="GREEN">COMMENT_STYLE</FONT>, <FONT COLOR="GREEN">BRACKET_STYLE</FONT>, <FONT COLOR="GREEN">KEYWORD_STYLE</FONT>,
+         <FONT COLOR="GREEN">MODIFIER_STYLE</FONT>, <FONT COLOR="GREEN">TYPE_STYLE</FONT>, <FONT COLOR="GREEN">CONTROL_STYLE</FONT>, <FONT COLOR="GREEN">DECLARE_STYLE</FONT>, <FONT COLOR="GREEN">LITERAL_STYLE</FONT>,
+         <FONT COLOR="GREEN">OTHER_STYLE</FONT>, <FONT COLOR="GREEN">CLASS_STYLE</FONT>, <FONT COLOR="GREEN">CONSTANT_STYLE</FONT>, <FONT COLOR="GREEN">NUMBER_STYLE</FONT>, <FONT COLOR="GREEN">STRING_STYLE</FONT>,
+         <FONT COLOR="GREEN">PLAIN_STYLE</FONT>, <FONT COLOR="GREEN">ANNOTATE_STYLE</FONT>, <FONT COLOR="GREEN">ANNOTATE_TAG</FONT>;
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Default configuration file name.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> configurationFileName = <FONT COLOR="#D2691E"><EM>"Hilite.Configuration"</EM></FONT>;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Properties loaded from the configuration.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>Properties</STRONG></FONT> configuration = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Properties</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;  
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Gets the specified attribute from the configuration's properties.
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>attribute&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the property's name</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> configure <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> attribute<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> configuration.getProperty<FONT COLOR="#444444">(</FONT>attribute<FONT COLOR="#444444">)</FONT>;      
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Gets the specified attribute to the value of configuration's
+    properties if there is one (returning <tt>null</tt> when it is
+    equal to <tt>*</tt>). If there is not, returns the specified
+    default value.
+           
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>attribute&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the property's name</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>defaultValue&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the default value</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> configure <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> attribute, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultValue<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> value = configuration.getProperty<FONT COLOR="#444444">(</FONT>attribute<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>value == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> ? defaultValue : <FONT COLOR="#444444">(</FONT>value.equals<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*"</EM></FONT><FONT COLOR="#444444">)</FONT> ? <FONT COLOR="GREEN">null</FONT> : value<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Initiates the configuration of the highlighter by looking for a
+    configuration file. If one is found, it loads it into the configuration
+    properties.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> configure <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT> configurationFile = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT><FONT COLOR="#444444">(</FONT>configurationFileName<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#88AA66"><EM>//      System.out.println("*** Configuration file:\t"+configurationFileName);
+</EM></FONT>      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>configurationFile.exists<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BROWN"><STRONG>try</STRONG></FONT>
+            <FONT COLOR="#444444">{</FONT>
+              configuration.load<FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileInputStream</STRONG></FONT><FONT COLOR="#444444">(</FONT>configurationFile<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT> <FONT COLOR="BROWN"><STRONG>catch</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT> e<FONT COLOR="#444444">)</FONT>
+              <FONT COLOR="#444444">{</FONT>
+                <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT>e+configurationFileName<FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+        <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** File "</EM></FONT>+configurationFileName+<FONT COLOR="#D2691E"><EM>" not found (using defaults)"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      configureValues<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Configure the color and style parameters.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> configureValues <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#88AA66"><EM>// fonts
+</EM></FONT>      <FONT COLOR="GREEN">FONT_SIZE</FONT>            = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"FONT_SIZE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#88AA66"><EM>// colors
+</EM></FONT>      <FONT COLOR="GREEN">BACKGROUND_COLOR</FONT>     = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"BACKGROUND_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"#CCCFF"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">SYNTAXDOC_BG_COLOR</FONT>   = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"SYNTAXDOC_BG_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"WHITE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">SYNTAXDOC_TEXT_COLOR</FONT> = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"SYNTAXDOC_TEXT_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"BLACK"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">COMMENT_COLOR</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"COMMENT_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"#777777"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">BRACKET_COLOR</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"BRACKET_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"GRAY"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">KEYWORD_COLOR</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"KEYWORD_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"BLUE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">MODIFIER_COLOR</FONT>       = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"MODIFIER_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"PURPLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">TYPE_COLOR</FONT>           = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"TYPE_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"BLUE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">CONTROL_COLOR</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"CONTROL_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"BROWN"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">DECLARE_COLOR</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"DECLARE_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"RED"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">LITERAL_COLOR</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"LITERAL_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"GREEN"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">OTHER_COLOR</FONT>          = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"OTHER_COLOR"</EM></FONT>,<FONT COLOR="GREEN">KEYWORD_COLOR</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">CLASS_COLOR</FONT>          = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"CLASS_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"BLUE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">CONSTANT_COLOR</FONT>       = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"CONSTANT_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"#009900"</EM></FONT><FONT COLOR="#444444">)</FONT>;      <FONT COLOR="#88AA66"><EM>// leaf green
+</EM></FONT>      <FONT COLOR="GREEN">NUMBER_COLOR</FONT>         = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"NUMBER_COLOR"</EM></FONT>,<FONT COLOR="GREEN">LITERAL_COLOR</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">STRING_COLOR</FONT>         = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"STRING_COLOR"</EM></FONT>,<FONT COLOR="GREEN">LITERAL_COLOR</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">TEXT_COLOR</FONT>           = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"TEXT_COLOR"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">ANNOTATE_COLOR</FONT>       = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"ANNOTATE_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"YELLOW"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">ANNOTATE_TAG_COLOR</FONT>   = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"ANNOTATE_TAG_COLOR"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"RED"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#88AA66"><EM>// styles
+</EM></FONT>      <FONT COLOR="GREEN">COMMENT_STYLE</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"COMMENT_STYLE"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"EM"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">BRACKET_STYLE</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"BRACKET_STYLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">KEYWORD_STYLE</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"KEYWORD_STYLE"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"STRONG"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">MODIFIER_STYLE</FONT>       = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"MODIFIER_STYLE"</EM></FONT>,<FONT COLOR="GREEN">KEYWORD_STYLE</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">TYPE_STYLE</FONT>           = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"TYPE_STYLE"</EM></FONT>,<FONT COLOR="GREEN">KEYWORD_STYLE</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">CONTROL_STYLE</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"CONTROL_STYLE"</EM></FONT>,<FONT COLOR="GREEN">KEYWORD_STYLE</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">DECLARE_STYLE</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"DECLARE_STYLE"</EM></FONT>,<FONT COLOR="GREEN">KEYWORD_STYLE</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">LITERAL_STYLE</FONT>        = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"LITERAL_STYLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">OTHER_STYLE</FONT>          = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"OTHER_STYLE"</EM></FONT>,<FONT COLOR="GREEN">KEYWORD_STYLE</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">CLASS_STYLE</FONT>          = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"CLASS_STYLE"</EM></FONT>,<FONT COLOR="GREEN">KEYWORD_STYLE</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">CONSTANT_STYLE</FONT>       = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"CONSTANT_STYLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">NUMBER_STYLE</FONT>         = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"NUMBER_STYLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">STRING_STYLE</FONT>         = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"STRING_STYLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">PLAIN_STYLE</FONT>          = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"PLAIN_STYLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">ANNOTATE_STYLE</FONT>       = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"ANNOTATE_STYLE"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="GREEN">ANNOTATE_TAG</FONT>         = configure<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"ANNOTATE_TAG"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"PLEASE READ"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#88AA66"><EM>// annotations
+</EM></FONT>      annotateTag          = <FONT COLOR="#D2691E"><EM>"&lt;BLINK&gt;&lt;FONT COLOR=\""</EM></FONT>+<FONT COLOR="GREEN">ANNOTATE_TAG_COLOR</FONT>+
+                             <FONT COLOR="#D2691E"><EM>"\" SIZE=-1&gt;&lt;B&gt;"</EM></FONT>+<FONT COLOR="GREEN">ANNOTATE_TAG</FONT>+<FONT COLOR="#D2691E"><EM>"&lt;/B&gt;&lt;/FONT&gt;&lt;/BLINK&gt;/"</EM></FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a keyword's highlight color as per its type.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> keywordColor <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">MODIFIER</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">MODIFIER_COLOR</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">TYPE</FONT><FONT COLOR="#444444">)</FONT>     <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">TYPE_COLOR</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">CONTROL</FONT><FONT COLOR="#444444">)</FONT>  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">CONTROL_COLOR</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">DECLARE</FONT><FONT COLOR="#444444">)</FONT>  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">DECLARE_COLOR</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">LITERAL</FONT><FONT COLOR="#444444">)</FONT>  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">LITERAL_COLOR</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">OTHER</FONT><FONT COLOR="#444444">)</FONT>    <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">OTHER_COLOR</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">KEYWORD_COLOR</FONT>;
+    <FONT COLOR="#444444">}</FONT>    
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a keyword's highlight style as per its type.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> keywordStyle <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">MODIFIER</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">MODIFIER_STYLE</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">TYPE</FONT><FONT COLOR="#444444">)</FONT>     <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">TYPE_STYLE</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">CONTROL</FONT><FONT COLOR="#444444">)</FONT>  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">CONTROL_STYLE</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">DECLARE</FONT><FONT COLOR="#444444">)</FONT>  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">DECLARE_STYLE</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">LITERAL</FONT><FONT COLOR="#444444">)</FONT>  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">LITERAL_STYLE</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType == <FONT COLOR="GREEN">OTHER</FONT><FONT COLOR="#444444">)</FONT>    <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">OTHER_STYLE</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">KEYWORD_STYLE</FONT>;
+    <FONT COLOR="#444444">}</FONT>    
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Constants to identify the type of tokens read from the input.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">EOF</FONT>       = -<FONT COLOR="#33AA33">1</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">PLAINCHAR</FONT> = <FONT COLOR="#33AA33">0</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">BRACKET</FONT>   = <FONT COLOR="#33AA33">1</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">COMMENT</FONT>   = <FONT COLOR="#33AA33">2</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">NUMBER</FONT>    = <FONT COLOR="#33AA33">3</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">STRING</FONT>    = <FONT COLOR="#33AA33">4</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">CLASS</FONT>     = <FONT COLOR="#33AA33">5</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">CONSTANT</FONT>  = <FONT COLOR="#33AA33">6</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">KEYWORD</FONT>   = <FONT COLOR="#33AA33">7</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">PLAINTEXT</FONT> = <FONT COLOR="#33AA33">8</FONT>;
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> <FONT COLOR="GREEN">SYNTAXDOC</FONT>   = <FONT COLOR="#33AA33">9</FONT>;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    True iff the current token is a class' name.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isClassIdentifier;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    True iff the current token is a constant's name.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isConstantIdentifier; 
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    The current token word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> tokenWord;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    The keyword type, if the current token word is a keyword.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> keywordType;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    The current token character.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> tokenChar;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    The current token type.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> tokenType;        
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Used to indicate that the comment is an annotation.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> annotateChar = <FONT COLOR="#D2691E"><EM>'$'</EM></FONT>;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    True whenever reading an annotation comment.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> annotateMode = <FONT COLOR="GREEN">false</FONT>;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    String indicating that the comment is an annotation.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> annotateTag;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    If true, format syntaxDoc comments.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> formatSyntaxDocComments = <FONT COLOR="GREEN">true</FONT>; 
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Contains syntaxDoc tag definitions.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT> syntaxDocTags;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    SyntaxDoc tag labels.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT> syntaxDocTagsLabels = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; 
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Static initializations.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> 
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#88AA66"><EM>// Filling the syntaxWords table:
+</EM></FONT>
+      jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"abstract"</EM></FONT><FONT COLOR="#444444">)</FONT>; jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"boolean"</EM></FONT><FONT COLOR="#444444">)</FONT>;    jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"break"</EM></FONT><FONT COLOR="#444444">)</FONT>;        jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"byte"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"case"</EM></FONT><FONT COLOR="#444444">)</FONT>;     jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"catch"</EM></FONT><FONT COLOR="#444444">)</FONT>;      jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"char"</EM></FONT><FONT COLOR="#444444">)</FONT>;         jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"class"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"const"</EM></FONT><FONT COLOR="#444444">)</FONT>;    jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"continue"</EM></FONT><FONT COLOR="#444444">)</FONT>;   jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"default"</EM></FONT><FONT COLOR="#444444">)</FONT>;      jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"do"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"double"</EM></FONT><FONT COLOR="#444444">)</FONT>;   jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"else"</EM></FONT><FONT COLOR="#444444">)</FONT>;       jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"extends"</EM></FONT><FONT COLOR="#444444">)</FONT>;      jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"final"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"finally"</EM></FONT><FONT COLOR="#444444">)</FONT>;  jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"float"</EM></FONT><FONT COLOR="#444444">)</FONT>;      jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"for"</EM></FONT><FONT COLOR="#444444">)</FONT>;          jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"goto"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"if"</EM></FONT><FONT COLOR="#444444">)</FONT>;       jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"implements"</EM></FONT><FONT COLOR="#444444">)</FONT>; jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"import"</EM></FONT><FONT COLOR="#444444">)</FONT>;       jkw_o<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"instanceof"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"int"</EM></FONT><FONT COLOR="#444444">)</FONT>;      jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"interface"</EM></FONT><FONT COLOR="#444444">)</FONT>;  jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"long"</EM></FONT><FONT COLOR="#444444">)</FONT>;         jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"native"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_o<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"new"</EM></FONT><FONT COLOR="#444444">)</FONT>;      jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"package"</EM></FONT><FONT COLOR="#444444">)</FONT>;    jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"private"</EM></FONT><FONT COLOR="#444444">)</FONT>;      jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"protected"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"public"</EM></FONT><FONT COLOR="#444444">)</FONT>;   jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"return"</EM></FONT><FONT COLOR="#444444">)</FONT>;     jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"short"</EM></FONT><FONT COLOR="#444444">)</FONT>;        jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"static"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_o<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"super"</EM></FONT><FONT COLOR="#444444">)</FONT>;    jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"switch"</EM></FONT><FONT COLOR="#444444">)</FONT>;     jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"synchronized"</EM></FONT><FONT COLOR="#444444">)</FONT>; jkw_o<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"this"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"throw"</EM></FONT><FONT COLOR="#444444">)</FONT>;    jkw_d<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"throws"</EM></FONT><FONT COLOR="#444444">)</FONT>;     jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"transient"</EM></FONT><FONT COLOR="#444444">)</FONT>;    jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"try"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_t<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"void"</EM></FONT><FONT COLOR="#444444">)</FONT>;     jkw_m<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"volatile"</EM></FONT><FONT COLOR="#444444">)</FONT>;   jkw_c<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"while"</EM></FONT><FONT COLOR="#444444">)</FONT>;        jkw_l<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"null"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      jkw_l<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"true"</EM></FONT><FONT COLOR="#444444">)</FONT>;     jkw_l<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"false"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#88AA66"><EM>// Filling the syntaxDocTagsLabels table:
+</EM></FONT>
+      syntaxDocTagsLabels.put<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"deprecated"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"&lt;BLINK&gt;Deprecated!&lt;/BLINK&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      syntaxDocTagsLabels.put<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"exception"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"Throws:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      syntaxDocTagsLabels.put<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"param"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"Parameters:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      syntaxDocTagsLabels.put<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"return"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"Returns:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      syntaxDocTagsLabels.put<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"see"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"See also:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      syntaxDocTagsLabels.put<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"since"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"Since:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      syntaxDocTagsLabels.put<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"version"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"Version:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>      
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true if the token character is for an annotation.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isAnnotateChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> 
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == annotateChar<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is a round, curly, or square bracket.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isBracket<FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'{'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'}'</EM></FONT>:
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'('</EM></FONT>: <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>')'</EM></FONT>:
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'['</EM></FONT>: <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>']'</EM></FONT>:
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is a single or double quote.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isQuote<FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+<FONT COLOR="#88AA66"><EM>//         case '\'':
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'"'</EM></FONT>:
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given string is a Syntax keyword.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isKeyword <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      keywordType = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">)</FONT>syntaxWords.get<FONT COLOR="#444444">(</FONT>tokenWord.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>keywordType != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is a legal start for a Syntax identifier.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isIdentifierStart <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isJavaIdentifierStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is a legal part of a Syntax identifier.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isIdentifierPart <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isJavaIdentifierPart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is a numerical digit.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isDigit <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isDigit<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is an alphabetical character.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isLetter <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isLetter<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is an uppercase letter.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isUpperCase <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isUpperCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the given character is a lowercase letter.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isLowerCase <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isLowerCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the HTML encoding of the given character as a string.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> htmlCodeString <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'&lt;'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&amp;lt;"</EM></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'&gt;'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&amp;gt;"</EM></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'&amp;'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&amp;amp;"</EM></FONT>;
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Writes the current token character's HTML encoding to the output file.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> writeTokenChar <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      output.write<FONT COLOR="#444444">(</FONT>htmlCodeString<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the next character in the input stream.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> nextChar <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>EOFException</STRONG></FONT>, <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c = input.read<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+<FONT COLOR="#88AA66"><EM>//       System.err.print(java.lang.Character.toString((char)c));
+</EM></FONT>      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c == -<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throw</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>EOFException</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> c;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Reads an identifier off the input stream into the current token word.
+    Determines what kind of identifier that is (class name, constant name,
+    or other).
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> readIdentifier <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      tokenWord = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      isClassIdentifier = isUpperCase<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+      isConstantIdentifier = isClassIdentifier;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT>;;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isIdentifierPart<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              tokenWord.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+              isConstantIdentifier &amp;=
+                <FONT COLOR="#444444">(</FONT>!isLetter<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT> || !isLowerCase<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT>
+          <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+            <FONT COLOR="#444444">{</FONT>
+              input.unread<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Reads a maximal string of numerical digits off the input stream into the
+    current token word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> readNumber <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      tokenWord = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT>;;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isDigit<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              tokenWord.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT>
+          <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+            <FONT COLOR="#444444">{</FONT>
+              input.unread<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Turns on annotation mode if such is the case.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> checkAnnotate <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      annotateMode = isAnnotateChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>annotateMode<FONT COLOR="#444444">)</FONT> tokenWord.append<FONT COLOR="#444444">(</FONT>annotateTag<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT> input.unread<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Reads a C++-style comment into the current token word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> readSlashSlashComment <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      tokenWord = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"//"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      checkAnnotate<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT>;;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          tokenWord.append<FONT COLOR="#444444">(</FONT>htmlCodeString<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;    
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+        <FONT COLOR="#444444">}</FONT>      
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Reads a C-style comment into the current token word.
+    If the switch <tt>formatSyntaxDocComments</tt> is on
+    and this is a syntaxDoc comment (<i>i.e.</i>, there
+    are two stars after the slash) then it is formatted.
+    Otherwise, it is treated as a normal C-style comment.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> readSlashStarComment <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>formatSyntaxDocComments &amp;&amp; isSyntaxDocComment<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          formatSyntaxDocComment<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+        <FONT COLOR="#444444">}</FONT>
+
+      tokenWord = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"/"</EM></FONT>+<FONT COLOR="#D2691E"><EM>"*"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      checkAnnotate<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> followingChar;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT>;;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          tokenWord.append<FONT COLOR="#444444">(</FONT>htmlCodeString<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+          
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'*'</EM></FONT><FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              followingChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>followingChar == <FONT COLOR="#D2691E"><EM>'/'</EM></FONT><FONT COLOR="#444444">)</FONT>
+                <FONT COLOR="#444444">{</FONT>
+                  tokenWord.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"/"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+                <FONT COLOR="#444444">}</FONT>
+              <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+                tokenWord.append<FONT COLOR="#444444">(</FONT>htmlCodeString<FONT COLOR="#444444">(</FONT>followingChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true if this is a syntaxDoc comments.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isSyntaxDocComment <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar != <FONT COLOR="#D2691E"><EM>'*'</EM></FONT><FONT COLOR="#444444">)</FONT>     <FONT COLOR="#88AA66"><EM>// this is not a syntaxDoc comment
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          input.unread<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+      
+      tokenType = <FONT COLOR="GREEN">SYNTAXDOC</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    This translates the syntaxDoc comment. It turns off the preformatted
+    mode so that HTML formatting becomes effective. Any star (*) is ignored
+    unless escaped with a backslash (i.e., \*) or followed by a / (to end
+    the comment).
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> formatSyntaxDocComment <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      syntaxDocTags = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;/PRE&gt;\n&lt;HR&gt;\n&lt;CENTER&gt;\n&lt;TABLE BGCOLOR=\""</EM></FONT>+<FONT COLOR="GREEN">SYNTAXDOC_BG_COLOR</FONT>+
+                   <FONT COLOR="#D2691E"><EM>"\" WIDTH=90% BORDER=1 CELLPADDING=10&gt;\n&lt;TR&gt;&lt;TD&gt;&lt;FONT COLOR=\""</EM></FONT>+
+                   <FONT COLOR="GREEN">SYNTAXDOC_TEXT_COLOR</FONT>+<FONT COLOR="#D2691E"><EM>"\"&gt;\n"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    out:
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT>;;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+        skippingStars:
+          <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'*'</EM></FONT><FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'/'</EM></FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT> out;  <FONT COLOR="#88AA66"><EM>// this ends the comment
+</EM></FONT>              <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT> skippingStars;           <FONT COLOR="#88AA66"><EM>// otherwise ignore stars
+</EM></FONT>            <FONT COLOR="#444444">}</FONT>
+
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'\\'</EM></FONT><FONT COLOR="#444444">)</FONT>        <FONT COLOR="#88AA66"><EM>// the next character is escaped
+</EM></FONT>            tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;     <FONT COLOR="#88AA66"><EM>// process it as a non-special one
+</EM></FONT>
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'@'</EM></FONT><FONT COLOR="#444444">)</FONT>         <FONT COLOR="#88AA66"><EM>// start of a syntaxDoc tag definition line
+</EM></FONT>            recordSyntaxDocTag<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;         <FONT COLOR="#88AA66"><EM>// record the definition for the tag
+</EM></FONT>          <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+            output.write<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;    <FONT COLOR="#88AA66"><EM>// otherwise, just output the character
+</EM></FONT>        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!syntaxDocTags.isEmpty<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>       <FONT COLOR="#88AA66"><EM>// end with the syntaxDoc tags if any
+</EM></FONT>        formatSyntaxDocTags<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;/FONT&gt;&lt;/TD&gt;&lt;/TR&gt;\n&lt;/TABLE&gt;\n&lt;/CENTER&gt;\n&lt;P&gt;\n&lt;PRE&gt;\n"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Reads and records a syntaxDoc tag and its definition in a table.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+  
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> recordSyntaxDocTag <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#88AA66"><EM>// If the char following the '@' is not a letter
+</EM></FONT>      <FONT COLOR="#88AA66"><EM>// just output "@" followed by the char and exit
+</EM></FONT>      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!isLetter<FONT COLOR="#444444">(</FONT>tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'@'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+          output.write<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+        <FONT COLOR="#444444">}</FONT>
+      
+      <FONT COLOR="#88AA66"><EM>// This is a bona fide tag; read it and process it
+</EM></FONT>      tokenWord = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>do</STRONG></FONT> tokenWord.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isLetter<FONT COLOR="#444444">(</FONT>tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT> tagDefs = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT><FONT COLOR="#444444">)</FONT>syntaxDocTags.get<FONT COLOR="#444444">(</FONT>tokenWord.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tagDefs == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        syntaxDocTags.put<FONT COLOR="#444444">(</FONT>tokenWord.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>,<FONT COLOR="#444444">(</FONT>tagDefs = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#88AA66"><EM>// If there is nothing else on this line, exit
+</EM></FONT>      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+
+      tokenWord = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT>tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> != <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>
+        tokenWord.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;
+
+      tagDefs.add<FONT COLOR="#444444">(</FONT>tokenWord.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.trim<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>      
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Formats the recorded syntaxDoc tags and their definitions.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+  
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> formatSyntaxDocTags<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> tag;
+      
+      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;P&gt;&lt;TABLE&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> k = syntaxDocTags.keySet<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.iterator<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; k.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          tag = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">)</FONT>k.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      
+          output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;TR&gt;&lt;TD VALIGN=TOP&gt;&lt;STRONG&gt;"</EM></FONT>+syntaxDocTagFormat<FONT COLOR="#444444">(</FONT>tag<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>"&lt;/STRONG&gt;&lt;/TD&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+          output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;TD&gt;&amp;nbsp;&lt;/TD&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+          
+          <FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT> tagDefs = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT><FONT COLOR="#444444">)</FONT>syntaxDocTags.get<FONT COLOR="#444444">(</FONT>tag<FONT COLOR="#444444">)</FONT>;
+
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!tagDefs.isEmpty<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> first = <FONT COLOR="GREEN">true</FONT>;
+              <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> paramTag = tag.equalsIgnoreCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"param"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+              
+              <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> e = tagDefs.iterator<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; e.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;<FONT COLOR="#444444">)</FONT>
+                <FONT COLOR="#444444">{</FONT>
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>first<FONT COLOR="#444444">)</FONT>
+                    <FONT COLOR="#444444">{</FONT>
+                      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;TD&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                      first = <FONT COLOR="GREEN">false</FONT>;
+                      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>paramTag<FONT COLOR="#444444">)</FONT> output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;TABLE&gt;\n"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                    <FONT COLOR="#444444">}</FONT>
+                  <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT> output.write<FONT COLOR="#444444">(</FONT>paramTag ? <FONT COLOR="#D2691E"><EM>"\n"</EM></FONT> : <FONT COLOR="#D2691E"><EM>", "</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+                  output.write<FONT COLOR="#444444">(</FONT>syntaxDocTagDefFormat<FONT COLOR="#444444">(</FONT>tag,<FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">)</FONT>e.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+                <FONT COLOR="#444444">}</FONT>
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>paramTag<FONT COLOR="#444444">)</FONT> output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;/TABLE&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;/TD&gt;&lt;/tr&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+
+      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;/TABLE&gt;\n"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the format label for the given tag.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> syntaxDocTagFormat <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> tag<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> label = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">)</FONT>syntaxDocTagsLabels.get<FONT COLOR="#444444">(</FONT>tag<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>label != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> label;
+
+      <FONT COLOR="#88AA66"><EM>// If not a standard tag, the label is the capitalized tag followed with ':'
+</EM></FONT>      label = <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.toUpperCase<FONT COLOR="#444444">(</FONT>tag.charAt<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>+
+              tag.toLowerCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>":"</EM></FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> label;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the formatted definition as per the given tag. The <tt>String def</tt>
+    contains the definition (the term and the definition) separated by either a space
+    or a tab character.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> syntaxDocTagDefFormat <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> tag, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> def<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tag.equalsIgnoreCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"param"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = def.indexOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>' '</EM></FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> j = def.indexOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\t'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i&gt;= <FONT COLOR="#33AA33">0</FONT> &amp;&amp; j&gt;= <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>       
+            i = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.min<FONT COLOR="#444444">(</FONT>i,j<FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>  <FONT COLOR="#88AA66"><EM>// (i &lt; 0 || j &lt; 0)
+</EM></FONT>            i = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>i,j<FONT COLOR="#444444">)</FONT>;
+          
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&lt;TR&gt;&lt;TD VALIGN=BASELINE&gt;&lt;FONT COLOR=\""</EM></FONT>+<FONT COLOR="GREEN">SYNTAXDOC_TEXT_COLOR</FONT>+
+                 <FONT COLOR="#D2691E"><EM>"\"&gt;&lt;TT&gt;"</EM></FONT>+<FONT COLOR="#444444">(</FONT>i &gt;= <FONT COLOR="#33AA33">0</FONT>?def.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT>,i<FONT COLOR="#444444">)</FONT>:def<FONT COLOR="#444444">)</FONT>+
+                 <FONT COLOR="#D2691E"><EM>"&amp;nbsp;&lt;/TT&gt;&lt;/FONT&gt;&lt;/TD&gt;&lt;TD&gt;&lt;FONT COLOR=\""</EM></FONT>+
+                 <FONT COLOR="GREEN">SYNTAXDOC_TEXT_COLOR</FONT>+<FONT COLOR="#D2691E"><EM>"\"&gt;- "</EM></FONT>+<FONT COLOR="#444444">(</FONT>i &gt;= <FONT COLOR="#33AA33">0</FONT>?def.substring<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>:def<FONT COLOR="#444444">)</FONT>+
+                 <FONT COLOR="#D2691E"><EM>"&lt;/FONT&gt;&lt;/TD&gt;&lt;/TR&gt;"</EM></FONT>;
+        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!tag.equalsIgnoreCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"see"</EM></FONT><FONT COLOR="#444444">)</FONT> || def.regionMatches<FONT COLOR="#444444">(</FONT><FONT COLOR="GREEN">true</FONT>,<FONT COLOR="#33AA33">0</FONT>,<FONT COLOR="#D2691E"><EM>"&lt;A HREF"</EM></FONT>,<FONT COLOR="#33AA33">0</FONT>,<FONT COLOR="#33AA33">7</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> def;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = def.lastIndexOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'#'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> refBase = <FONT COLOR="#444444">(</FONT>i&lt;<FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> ? def : def.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT>,i<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> refTag = <FONT COLOR="#444444">(</FONT>i&lt;<FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> ? <FONT COLOR="#D2691E"><EM>""</EM></FONT> : def.substring<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&lt;A HREF=\""</EM></FONT>+refBase+<FONT COLOR="#444444">(</FONT>refBase.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>&gt;<FONT COLOR="#33AA33">0</FONT>?<FONT COLOR="#D2691E"><EM>".html"</EM></FONT>:<FONT COLOR="#D2691E"><EM>""</EM></FONT><FONT COLOR="#444444">)</FONT>+refTag+<FONT COLOR="#D2691E"><EM>"\"&gt;"</EM></FONT>+
+             <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT>i&lt;<FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> ? refBase.substring<FONT COLOR="#444444">(</FONT>refBase.lastIndexOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'.'</EM></FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>
+                    : refTag.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+             +<FONT COLOR="#D2691E"><EM>"&lt;/A&gt;"</EM></FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Reads a quoted string into the current token word.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> readQuotedWord <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      tokenWord = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> quote = tokenChar;      
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> prevChar = <FONT COLOR="#33AA33">0</FONT>;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> prevPrevChar;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT>;;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          prevPrevChar = prevChar;
+          prevChar = tokenChar;
+          tokenChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          tokenWord.append<FONT COLOR="#444444">(</FONT>htmlCodeString<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == quote<FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>prevChar == <FONT COLOR="#D2691E"><EM>'\\'</EM></FONT><FONT COLOR="#444444">)</FONT>
+                <FONT COLOR="#444444">{</FONT>
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>prevPrevChar == <FONT COLOR="#D2691E"><EM>'\\'</EM></FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+                  <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT>;
+                <FONT COLOR="#444444">}</FONT>
+              <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\\  
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Reads the next token off the input stream.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> nextToken <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      tokenChar = input.read<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;         <FONT COLOR="#88AA66"><EM>// read a character
+</EM></FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == -<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>              <FONT COLOR="#88AA66"><EM>// this is the end of the file
+</EM></FONT>        <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">EOF</FONT><FONT COLOR="#444444">)</FONT>;       <FONT COLOR="#88AA66"><EM>// set the token type to EOF and exit
+</EM></FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isIdentifierStart<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="#88AA66"><EM>// this is the start Syntax identifier
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          readIdentifier<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;             <FONT COLOR="#88AA66"><EM>// read the identifier
+</EM></FONT>
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isConstantIdentifier<FONT COLOR="#444444">)</FONT>     <FONT COLOR="#88AA66"><EM>// this is a constant's name
+</EM></FONT>            <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">CONSTANT</FONT><FONT COLOR="#444444">)</FONT>;      <FONT COLOR="#88AA66"><EM>// set the token type to CONSTANT and exit
+</EM></FONT>
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isClassIdentifier<FONT COLOR="#444444">)</FONT>        <FONT COLOR="#88AA66"><EM>// this is a class' name
+</EM></FONT>            <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">CLASS</FONT><FONT COLOR="#444444">)</FONT>;         <FONT COLOR="#88AA66"><EM>// set the token type to CLASS and exit
+</EM></FONT>
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isKeyword<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>              <FONT COLOR="#88AA66"><EM>// this is a Syntax keyword
+</EM></FONT>            <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">KEYWORD</FONT><FONT COLOR="#444444">)</FONT>;       <FONT COLOR="#88AA66"><EM>// set the token type to KEYWORD and exit
+</EM></FONT>          
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">PLAINTEXT</FONT><FONT COLOR="#444444">)</FONT>;       <FONT COLOR="#88AA66"><EM>// set the token type to PLAINTEXT and exit
+</EM></FONT>        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isDigit<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>           <FONT COLOR="#88AA66"><EM>// this is a number
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          readNumber<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;                 <FONT COLOR="#88AA66"><EM>// read the number
+</EM></FONT>          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">NUMBER</FONT><FONT COLOR="#444444">)</FONT>;          <FONT COLOR="#88AA66"><EM>// set the token type to NUMBER and exit
+</EM></FONT>        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenChar == <FONT COLOR="#D2691E"><EM>'/'</EM></FONT><FONT COLOR="#444444">)</FONT>             <FONT COLOR="#88AA66"><EM>// this may be the start of a comment
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> followingChar = nextChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;       <FONT COLOR="#88AA66"><EM>// get the next character
+</EM></FONT>          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT>followingChar == <FONT COLOR="#D2691E"><EM>'/'</EM></FONT><FONT COLOR="#444444">)</FONT> || <FONT COLOR="#444444">(</FONT>followingChar == <FONT COLOR="#D2691E"><EM>'*'</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="#88AA66"><EM>// this is a comment
+</EM></FONT>            <FONT COLOR="#444444">{</FONT>
+              tokenType = <FONT COLOR="GREEN">COMMENT</FONT>;              <FONT COLOR="#88AA66"><EM>// set the token type to COMMENT
+</EM></FONT>              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>followingChar == <FONT COLOR="#D2691E"><EM>'/'</EM></FONT><FONT COLOR="#444444">)</FONT>         <FONT COLOR="#88AA66"><EM>// this a C++-style comment
+</EM></FONT>                <FONT COLOR="#444444">{</FONT>
+                  readSlashSlashComment<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;      <FONT COLOR="#88AA66"><EM>// read the C++-style comment
+</EM></FONT>                  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> tokenType;             <FONT COLOR="#88AA66"><EM>// and exit
+</EM></FONT>                <FONT COLOR="#444444">}</FONT>                               <FONT COLOR="#88AA66"><EM>// this is C-style comment
+</EM></FONT>              readSlashStarComment<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;           <FONT COLOR="#88AA66"><EM>// read the C-style comment
+</EM></FONT>              <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> tokenType;                 <FONT COLOR="#88AA66"><EM>// and exit
+</EM></FONT>            <FONT COLOR="#444444">}</FONT>
+          output.write<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT>;              <FONT COLOR="#88AA66"><EM>// write out the current token character
+</EM></FONT>          input.unread<FONT COLOR="#444444">(</FONT>followingChar<FONT COLOR="#444444">)</FONT>;          <FONT COLOR="#88AA66"><EM>// and push back the following character
+</EM></FONT>          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> nextToken<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;                   <FONT COLOR="#88AA66"><EM>// return the next token
+</EM></FONT>        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isQuote<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>           <FONT COLOR="#88AA66"><EM>// this is the start of a quoted word
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          readQuotedWord<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;             <FONT COLOR="#88AA66"><EM>// read the quoted word
+</EM></FONT>          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">STRING</FONT><FONT COLOR="#444444">)</FONT>;  <FONT COLOR="#88AA66"><EM>// set the token type to STRING and exit
+</EM></FONT>        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>isBracket<FONT COLOR="#444444">(</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>         <FONT COLOR="#88AA66"><EM>// this is a bracket
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          tokenWord =                   <FONT COLOR="#88AA66"><EM>// set the token word to the bracket
+</EM></FONT>            <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>tokenChar<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">BRACKET</FONT><FONT COLOR="#444444">)</FONT>; <FONT COLOR="#88AA66"><EM>// set the token type to BRACKET and exit
+</EM></FONT>        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType = <FONT COLOR="GREEN">PLAINCHAR</FONT><FONT COLOR="#444444">)</FONT>;   <FONT COLOR="#88AA66"><EM>// set the token type to PLANCHAR and exit
+</EM></FONT>    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\\  
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    This is the main method. It loops reading through the input
+    file and processes the tokens as appropriate.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> hiliteFile <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.out.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** Hiliting file:\t"</EM></FONT>+<FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.simpleName<FONT COLOR="#444444">(</FONT>inputFileName<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      preamble<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    out:
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT>;;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>nextToken<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+            <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">EOF</FONT>:
+              input.close<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT> out;
+            <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">PLAINCHAR</FONT>:
+              writeTokenChar<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+            <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">PLAINTEXT</FONT>:
+              output.write<FONT COLOR="#444444">(</FONT>tokenWord.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+            <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">SYNTAXDOC</FONT>:
+              <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+            <FONT COLOR="BROWN"><STRONG>default</STRONG></FONT>:
+              hiliteTokenWord<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+      postamble<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    This method outputs whatever goes in the output file's preamble.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> preamble <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> bc = <FONT COLOR="#444444">(</FONT><FONT COLOR="GREEN">BACKGROUND_COLOR</FONT> == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        ? <FONT COLOR="#D2691E"><EM>""</EM></FONT>
+        : <FONT COLOR="#D2691E"><EM>" BGCOLOR=\""</EM></FONT>+<FONT COLOR="GREEN">BACKGROUND_COLOR</FONT>+<FONT COLOR="#D2691E"><EM>"\""</EM></FONT>;
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> tc = <FONT COLOR="#444444">(</FONT><FONT COLOR="GREEN">TEXT_COLOR</FONT> == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        ? <FONT COLOR="#D2691E"><EM>""</EM></FONT>
+        : <FONT COLOR="#D2691E"><EM>" TEXT=\""</EM></FONT>+<FONT COLOR="GREEN">TEXT_COLOR</FONT>+<FONT COLOR="#D2691E"><EM>"\""</EM></FONT>;
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> fs = <FONT COLOR="#444444">(</FONT><FONT COLOR="GREEN">FONT_SIZE</FONT> == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        ? <FONT COLOR="#D2691E"><EM>""</EM></FONT>
+        : <FONT COLOR="#D2691E"><EM>" SIZE=\""</EM></FONT>+<FONT COLOR="GREEN">FONT_SIZE</FONT>+<FONT COLOR="#D2691E"><EM>"\""</EM></FONT>;
+      
+      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;HTML&gt;\n&lt;HEAD&gt;\n&lt;TITLE&gt;\n"</EM></FONT>+outputFileName+
+                   <FONT COLOR="#D2691E"><EM>"\n&lt;/TITLE&gt;\n&lt;/HEAD&gt;\n&lt;BODY"</EM></FONT>+bc+tc+fs+<FONT COLOR="#D2691E"><EM>"&gt;"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"\n&lt;CENTER&gt;\n&lt;TABLE BGCOLOR=white WIDTH=50% BORDER=5 CELLPADDING=20&gt;"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"\n&lt;TR&gt;&lt;TD ALIGN=CENTER&gt;\n&lt;FONT SIZE=+5&gt;&lt;TT&gt;&lt;B&gt;"</EM></FONT>+
+                   <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.simpleName<FONT COLOR="#444444">(</FONT>inputFileName<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>"&lt;/B&gt;&lt;/TT&gt;&lt;/FONT&gt;\n&lt;P&gt;\n&lt;/TD&gt;&lt;/TR&gt;"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"\n&lt;/TABLE&gt;\n&lt;/CENTER&gt;\n&lt;PRE&gt;\n"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    This method outputs whatever goes in the output file's ending.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> postamble <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      output.write<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n&lt;/PRE&gt;\n&lt;P&gt;\n&lt;HR&gt;\n&lt;P ALIGN=\"RIGHT\"&gt;"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"&lt;FONT COLOR=\"#F07070\"&gt;&lt;EM&gt;\n"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"This file was generated on "</EM></FONT>+<FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Date</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>+
+                   <FONT COLOR="#D2691E"><EM>" from file &lt;FONT COLOR=\"BROWN\"&gt;&lt;KBD&gt;"</EM></FONT>+
+                   <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.simpleName<FONT COLOR="#444444">(</FONT>inputFileName<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>"&lt;/KBD&gt;&lt;/FONT&gt;&lt;BR&gt;"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"by the &lt;FONT COLOR=\"BROWN\"&gt;&lt;KBD&gt;"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"hlt.language.tools.GenericHilite&lt;/KBD&gt;&lt;/FONT&gt; Java tool"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>" written by &lt;A HREF=\"mailto:hak@acm.org\"&gt;"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"Hassan A&amp;iuml;t-Kaci&lt;/A&gt;&lt;/EM&gt;&lt;/FONT&gt;\n"</EM></FONT>+
+                   <FONT COLOR="#D2691E"><EM>"&lt;P&gt;\n&lt;HR&gt;\n&lt;/BODY&gt;\n&lt;/HTML&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      output.close<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.out.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** Wrote hilited file:\t"</EM></FONT>+outputFileName<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Outputs a token word highlighted in color and style according to its type.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> hiliteTokenWord <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> color = <FONT COLOR="GREEN">null</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> style = <FONT COLOR="GREEN">null</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>tokenType<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">BRACKET</FONT>:
+          color = <FONT COLOR="GREEN">BRACKET_COLOR</FONT>;
+          style = <FONT COLOR="GREEN">BRACKET_STYLE</FONT>;
+          <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">COMMENT</FONT>:
+          color = annotateMode ? <FONT COLOR="GREEN">ANNOTATE_COLOR</FONT> : <FONT COLOR="GREEN">COMMENT_COLOR</FONT>;
+          style = annotateMode ? <FONT COLOR="GREEN">ANNOTATE_STYLE</FONT> : <FONT COLOR="GREEN">COMMENT_STYLE</FONT>;
+          <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">NUMBER</FONT>:
+          color = <FONT COLOR="GREEN">NUMBER_COLOR</FONT>;
+          style = <FONT COLOR="GREEN">NUMBER_STYLE</FONT>;
+          <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">STRING</FONT>:
+          color = <FONT COLOR="GREEN">STRING_COLOR</FONT>;
+          style = <FONT COLOR="GREEN">STRING_STYLE</FONT>;
+          <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">KEYWORD</FONT>:
+          color = keywordColor<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          style = keywordStyle<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">CLASS</FONT>:
+          color = <FONT COLOR="GREEN">CLASS_COLOR</FONT>;
+          style = <FONT COLOR="GREEN">CLASS_STYLE</FONT>;
+          <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+        <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">CONSTANT</FONT>:
+          color = <FONT COLOR="GREEN">CONSTANT_COLOR</FONT>;
+          style = <FONT COLOR="GREEN">CONSTANT_STYLE</FONT>;
+          <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+        <FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>style != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        tokenWord.insert<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT>,<FONT COLOR="#D2691E"><EM>"&lt;"</EM></FONT>+style+<FONT COLOR="#D2691E"><EM>"&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/"</EM></FONT>+style+<FONT COLOR="#D2691E"><EM>"&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>color != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        tokenWord.insert<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT>,<FONT COLOR="#D2691E"><EM>"&lt;FONT COLOR=\""</EM></FONT>+color+<FONT COLOR="#D2691E"><EM>"\"&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/FONT&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;        
+      output.write<FONT COLOR="#444444">(</FONT>tokenWord.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT><FONT COLOR="#444444">}</FONT>
+
+</PRE>
+<P>
+<HR>
+<P ALIGN="RIGHT"><FONT COLOR="#F07070"><EM>
+This file was generated on Thu Jan 30 10:08:49 CET 2014 from file <FONT COLOR="BROWN"><KBD>GenericHilite.java</KBD></FONT><BR>by the <FONT COLOR="BROWN"><KBD>hlt.language.tools.Hilite</KBD></FONT> Java tool written by <A HREF="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</A></EM></FONT>
+<P>
+<HR>
+</BODY>
+</HTML>

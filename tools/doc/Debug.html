@@ -1,0 +1,230 @@
+<HTML>
+<HEAD>
+<TITLE>
+Debug.html
+</TITLE>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="C:/cygwin/home/hak/hlt/classes/resources/Hilite.Style.css">
+</HEAD>
+<BODY BGCOLOR="#CCCFF">
+<CENTER>
+<TABLE BGCOLOR=white WIDTH=50% BORDER=5 CELLPADDING=20>
+<TR><TD ALIGN=CENTER>
+<FONT SIZE=+5><TT><B>Debug.java</B></TT></FONT>
+<P>
+</TD></TR>
+</TABLE>
+</CENTER>
+<PRE>
+<FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT><FONT COLOR="#88AA66"><EM>// PLEASE DO NOT EDIT WITHOUT THE EXPLICIT CONSENT OF THE AUTHOR! \\
+</EM></FONT><FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+<FONT COLOR="BROWN"><STRONG>package</STRONG></FONT> hlt.language.tools;
+
+
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+  This implements a (very) primitive debugging class.
+ 
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Author:</STRONG></TD><TD>&nbsp;</TD>
+<TD><a href="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Copyright:</STRONG></TD><TD>&nbsp;</TD>
+<TD>&copy; <a href="http://www.hassan-ait-kaci.net/">by the author</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Version:</STRONG></TD><TD>&nbsp;</TD>
+<TD>Last modified on Sat Nov 10 20:15:13 2012 by hak
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>InputStreamReader</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>;
+
+<FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>class</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Debug</STRONG></FONT>
+<FONT COLOR="#444444">{</FONT>
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> _debugFlag;
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> setDebugFlag <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> flag<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      _debugFlag = flag;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> flagIsOn <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> _debugFlag;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Debug</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      step<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Debug</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> o<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      step<FONT COLOR="#444444">(</FONT>o<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> step = <FONT COLOR="#33AA33">0</FONT>;
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> quitString = <FONT COLOR="#D2691E"><EM>"quit"</EM></FONT>;
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Resets the quit string.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> setQuitString <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      quitString = s.intern<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+    
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the quit string.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> getQuitString <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> quitString;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the specified string is a non-empty
+    prefix of the quit string.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> matchesQuitString <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> &gt; <FONT COLOR="#33AA33">0</FONT> &amp;&amp; quitString.startsWith<FONT COLOR="#444444">(</FONT>s<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+    
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the specified string is the quit string.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isQuitString <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>s.intern<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == quitString<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+    
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> stepIfFlag <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> info<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>_debugFlag<FONT COLOR="#444444">)</FONT> step<FONT COLOR="#444444">(</FONT>info<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Prompts the user using the specified info and returns
+    the string entered by the user.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> step <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> info<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println
+        <FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n-------------------------------------------------------------------"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> msg = info <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> ? <FONT COLOR="#4400DD"><STRONG>Misc</STRONG></FONT>.arrayToString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>info<FONT COLOR="#444444">)</FONT>
+                   : info <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> ? <FONT COLOR="#4400DD"><STRONG>Misc</STRONG></FONT>.arrayToString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>info<FONT COLOR="#444444">)</FONT>
+                     : info <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> ? <FONT COLOR="#4400DD"><STRONG>Misc</STRONG></FONT>.arrayToString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>info<FONT COLOR="#444444">)</FONT>
+                       : info.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Misc</STRONG></FONT>.prompt<FONT COLOR="#444444">(</FONT>msg+<FONT COLOR="#D2691E"><EM>"\nSTEP ["</EM></FONT>+<FONT COLOR="#444444">(</FONT>++step<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>"] &gt;"</EM></FONT>, <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> step <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> step<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>""</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+<FONT COLOR="#444444">}</FONT>
+
+
+
+</PRE>
+<P>
+<HR>
+<P ALIGN="RIGHT"><FONT COLOR="#F07070"><EM>
+This file was generated on Thu Jan 30 10:08:49 CET 2014 from file <FONT COLOR="BROWN"><KBD>Debug.java</KBD></FONT><BR>by the <FONT COLOR="BROWN"><KBD>hlt.language.tools.Hilite</KBD></FONT> Java tool written by <A HREF="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</A></EM></FONT>
+<P>
+<HR>
+</BODY>
+</HTML>

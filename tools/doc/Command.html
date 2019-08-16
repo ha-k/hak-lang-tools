@@ -1,0 +1,903 @@
+<HTML>
+<HEAD>
+<TITLE>
+Command.html
+</TITLE>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="C:/cygwin/home/hak/hlt/classes/resources/Hilite.Style.css">
+</HEAD>
+<BODY BGCOLOR="#CCCFF">
+<CENTER>
+<TABLE BGCOLOR=white WIDTH=50% BORDER=5 CELLPADDING=20>
+<TR><TD ALIGN=CENTER>
+<FONT SIZE=+5><TT><B>Command.java</B></TT></FONT>
+<P>
+</TD></TR>
+</TABLE>
+</CENTER>
+<PRE>
+<FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT><FONT COLOR="#88AA66"><EM>// PLEASE DO NOT EDIT WITHOUT THE EXPLICIT CONSENT OF THE AUTHOR! \\
+</EM></FONT><FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+<FONT COLOR="BROWN"><STRONG>package</STRONG></FONT> hlt.language.tools;
+
+
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+  This class implements a simple UNIX style command parser. It is meant to
+  be subclassed or used directly through its static methods (which is why it
+  has no constructor). Its method <tt>parseCommandLine(String[])</tt> takes
+  the array of strings on command line (<i>i.e.</i>, the argument of a
+  <tt>main</tt> method) and determines which options are used with what
+  values.  It also defines a few utilities (1) to set and access the values of
+  the options and arguments specified in the parsed command, (2) to determine
+  if these are present, and (3) to do simple file name completion.
+ 
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Author:</STRONG></TD><TD>&nbsp;</TD>
+<TD><a href="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Copyright:</STRONG></TD><TD>&nbsp;</TD>
+<TD>&copy; <a href="http://www.hassan-ait-kaci.net/">by the author</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Version:</STRONG></TD><TD>&nbsp;</TD>
+<TD>Last modified on Fri Apr 13 19:43:43 2012 by hak
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.*;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.io.<FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>;
+
+<FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>class</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Command</STRONG></FONT>
+<FONT COLOR="#444444">{</FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Options storage.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT> optionTable = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HashMap</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Command arguments.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> arguments = <FONT COLOR="GREEN">null</FONT>;
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Default argument.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultArgument = <FONT COLOR="GREEN">null</FONT>;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    The widest length of option names.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> optionWidth = <FONT COLOR="#D2691E"><EM>" Option"</EM></FONT>.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    The widest length of option defaults.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> defaultWidth = <FONT COLOR="#D2691E"><EM>"(Default)"</EM></FONT>.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Sets the default argument to the specified string.
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>arg&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  value to use if the command argument is missing</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> optionalArgument <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arg<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      defaultArgument = arg;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Used locally to check whether the specified option is legal.
+    If this option shares a prefix with one already defined,
+    a <kbd><b>CommandException</kbd></b> is reported.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> checkOption <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> option<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> e = optionTable.values<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.iterator<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; e.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT> entry = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT><FONT COLOR="#444444">)</FONT>e.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>entry.name.startsWith<FONT COLOR="#444444">(</FONT>option<FONT COLOR="#444444">)</FONT> || option.startsWith<FONT COLOR="#444444">(</FONT>entry.name<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="BROWN"><STRONG>throw</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>CommandException</STRONG></FONT>
+              <FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\nAttempt to define option '"</EM></FONT>+option+
+               <FONT COLOR="#D2691E"><EM>"' which conflicts with defined option '"</EM></FONT>+entry.name+<FONT COLOR="#D2691E"><EM>"'"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>     
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Defines an option with a default value.
+   
+           
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>option&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the option string</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>defaultValue&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the option's default</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> defineOption <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> option, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultValue<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      checkOption<FONT COLOR="#444444">(</FONT>option<FONT COLOR="#444444">)</FONT>;
+      optionTable.put<FONT COLOR="#444444">(</FONT>option,<FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT><FONT COLOR="#444444">(</FONT>option,defaultValue<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      optionWidth = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>optionWidth,option.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;
+      defaultWidth = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>defaultWidth,defaultValue.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#33AA33">2</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Defines an option with a default value and description.
+   
+               
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>option&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the option string</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>defaultValue&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the option's default</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>help&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  option's description</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> defineOption <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> option, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultValue, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> help<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      checkOption<FONT COLOR="#444444">(</FONT>option<FONT COLOR="#444444">)</FONT>;
+      optionTable.put<FONT COLOR="#444444">(</FONT>option,<FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT><FONT COLOR="#444444">(</FONT>option,defaultValue,help<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      optionWidth = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>optionWidth,option.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;
+      defaultWidth = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>defaultWidth,defaultValue.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#33AA33">2</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the value associated with an option. If the option is
+    undefined, a <kbd><b>CommandException</kbd></b> is reported.
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>option&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the option</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> getOption <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> option<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT> entry = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT><FONT COLOR="#444444">)</FONT>optionTable.get<FONT COLOR="#444444">(</FONT>option<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>entry == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="BROWN"><STRONG>throw</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>CommandException</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"Unknown command option ("</EM></FONT>
+                                   +option+<FONT COLOR="#D2691E"><EM>")"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>entry.value == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> entry.defaultValue;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> entry.value;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff the option is actually present on the command line.
+    If the option is undefined, a <kbd><b>CommandException</kbd></b>
+    is reported.
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>option&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the option</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> optionIsPresent <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> option<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT> entry =<FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT><FONT COLOR="#444444">)</FONT>optionTable.get<FONT COLOR="#444444">(</FONT>option<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>entry == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="BROWN"><STRONG>throw</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>CommandException</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"Unknown command option ("</EM></FONT>
+                                   +option+<FONT COLOR="#D2691E"><EM>")"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT>entry.value != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the value of the argument. If none is specified, returns the
+    default argument. If many are specified, the first is returned.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> getArgument <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>arguments == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> defaultArgument;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> arguments<FONT COLOR="#444444">[</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">]</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the array of values of all the arguments. If none is specified,
+    returns a one element array containing the default argument.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> getArguments <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>arguments == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a = <FONT COLOR="#444444">{</FONT>defaultArgument<FONT COLOR="#444444">}</FONT>;
+          <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> a;
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> arguments;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns true iff an argument is actually present on the command line.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> argumentIsPresent <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> arguments != <FONT COLOR="GREEN">null</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a file's name without its extension, but including its directory path.
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>name&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the file's name</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> fullFileNamePrefix <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.fullPrefix<FONT COLOR="#444444">(</FONT>name<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a file's name without its extension nor its directory path.
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>name&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the file's name</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> fileNamePrefix <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.prefix<FONT COLOR="#444444">(</FONT>name<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a file's name's directory part.
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>name&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the file's name</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> fileNameDir <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.dir<FONT COLOR="#444444">(</FONT>name<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a file's name extension.
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>name&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the file's name</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> fileNameSuffix <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.suffix<FONT COLOR="#444444">(</FONT>name<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a file's name completed with its extension if the latter
+    is missing.
+   
+           
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>name&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the file's name</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>ext&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  the file's extension</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> completeFileName <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> ext<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> suffix = <FONT COLOR="#D2691E"><EM>"."</EM></FONT>+ext;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>name.endsWith<FONT COLOR="#444444">(</FONT>suffix<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> name;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> name+suffix;         
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Prints an item on a given maximum field width.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> padWrite <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> item, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> width<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.print<FONT COLOR="#444444">(</FONT>item<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=item.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; i&lt;=width; i++<FONT COLOR="#444444">)</FONT> <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.print<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>" "</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Prints a line description of an option.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> printHelpLine <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> option, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> value, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> description<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      padWrite<FONT COLOR="#444444">(</FONT>option,optionWidth<FONT COLOR="#444444">)</FONT>;
+      padWrite<FONT COLOR="#444444">(</FONT>value,defaultWidth<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT>description<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>  
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> usage = <FONT COLOR="GREEN">null</FONT>;
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> getUsage <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> usage;
+    <FONT COLOR="#444444">}</FONT>
+  
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> setUsage <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> usg<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      usage = usg;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> printUsage <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>usage != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT>usage<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Prints a listing of known options, their defaults, and descriptions.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> printHelp <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      printUsage<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>optionTable.size<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"Sorry - no help available!"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+        <FONT COLOR="#444444">{</FONT>
+          printHelpLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"Option "</EM></FONT>,<FONT COLOR="#D2691E"><EM>"(Default)"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"Description"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+          printHelpLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"------ "</EM></FONT>,<FONT COLOR="#D2691E"><EM>"---------"</EM></FONT>,<FONT COLOR="#D2691E"><EM>"-----------"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+          <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> e = optionTable.values<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.iterator<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; e.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;<FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT> entry = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT><FONT COLOR="#444444">)</FONT>e.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+              printHelpLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"-"</EM></FONT>+entry.name,<FONT COLOR="#D2691E"><EM>"("</EM></FONT>+entry.defaultValue+<FONT COLOR="#D2691E"><EM>")"</EM></FONT>,entry.help<FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT>
+          <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Parses the command line recognizing the defined options and the
+    arguments, and storing their specified values as appropriate.
+    Note that if the same option is specified more than once on the
+    command line, only the last one is effective.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+    
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> parseCommandLine <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> args<FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT> option = <FONT COLOR="GREEN">null</FONT>;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = <FONT COLOR="#33AA33">0</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt; args.length<FONT COLOR="#444444">)</FONT>                   <FONT COLOR="#88AA66"><EM>// as long as there are arguments
+</EM></FONT>        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>args<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>.charAt<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#D2691E"><EM>'-'</EM></FONT><FONT COLOR="#444444">)</FONT>         <FONT COLOR="#88AA66"><EM>// if this argument starts with '-', it is an option
+</EM></FONT>            <FONT COLOR="#444444">{</FONT>
+              <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> known = <FONT COLOR="GREEN">false</FONT>;            <FONT COLOR="#88AA66"><EM>// a flag to indicate that this option is known
+</EM></FONT>              <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> hasValue = <FONT COLOR="GREEN">false</FONT>;         <FONT COLOR="#88AA66"><EM>// a flag to indicate that this option is "stuck" to its value
+</EM></FONT>              args<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> = args<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;   <FONT COLOR="#88AA66"><EM>// keep what follows the '-'
+</EM></FONT>              <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> full = args<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;      <FONT COLOR="#88AA66"><EM>// the full length of the argument
+</EM></FONT>              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>full &gt; <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>                     <FONT COLOR="#88AA66"><EM>// if there is something after the '-'
+</EM></FONT>                <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> e = optionTable.values<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.iterator<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; e.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;<FONT COLOR="#444444">)</FONT>      <FONT COLOR="#88AA66"><EM>// for all known options
+</EM></FONT>                  <FONT COLOR="#444444">{</FONT>
+                    option = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT><FONT COLOR="#444444">)</FONT>e.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;      <FONT COLOR="#88AA66"><EM>// let option be the next known option
+</EM></FONT>                    <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>args<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>.startsWith<FONT COLOR="#444444">(</FONT>option.name<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>        <FONT COLOR="#88AA66"><EM>// if it matches the start of this argument
+</EM></FONT>                      <FONT COLOR="#444444">{</FONT>
+                        <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> part = option.name.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;        <FONT COLOR="#88AA66"><EM>// let part be the length of the option name
+</EM></FONT>                        <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>hasValue = <FONT COLOR="#444444">(</FONT>part &lt; full<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>           <FONT COLOR="#88AA66"><EM>// the option has a value if is name is shorter than the argument
+</EM></FONT>                          option.value = args<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>.substring<FONT COLOR="#444444">(</FONT>part,full<FONT COLOR="#444444">)</FONT>;  <FONT COLOR="#88AA66"><EM>// extracts the value as the tail of the argument
+</EM></FONT>                        known = <FONT COLOR="GREEN">true</FONT>;                           <FONT COLOR="#88AA66"><EM>// remember that we found this option
+</EM></FONT>                        <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;                                  <FONT COLOR="#88AA66"><EM>// no need to look further.
+</EM></FONT>                      <FONT COLOR="#444444">}</FONT>
+                  <FONT COLOR="#444444">}</FONT>
+
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!known<FONT COLOR="#444444">)</FONT>                       <FONT COLOR="#88AA66"><EM>// this is not a known option
+</EM></FONT>                <FONT COLOR="#444444">{</FONT>
+                  printHelp<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;                  <FONT COLOR="#88AA66"><EM>// tell what options are known
+</EM></FONT>                  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;                 <FONT COLOR="#88AA66"><EM>// the parsing fails
+</EM></FONT>                <FONT COLOR="#444444">}</FONT>
+              <FONT COLOR="#88AA66"><EM>// this is a known option
+</EM></FONT>              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>hasValue<FONT COLOR="#444444">)</FONT>                     <FONT COLOR="#88AA66"><EM>// and its value is part of it
+</EM></FONT>                <FONT COLOR="#444444">{</FONT>
+                  i++;                          <FONT COLOR="#88AA66"><EM>// proceed to the next argument
+</EM></FONT>                  <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT>;
+                <FONT COLOR="#444444">}</FONT>
+              <FONT COLOR="#88AA66"><EM>// is there a value for this option?
+</EM></FONT>              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt; args.length-<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>            <FONT COLOR="#88AA66"><EM>// if there are more arguments
+</EM></FONT>                <FONT COLOR="#444444">{</FONT>
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>args<FONT COLOR="#444444">[</FONT>i+<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">]</FONT>.charAt<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> != <FONT COLOR="#D2691E"><EM>'-'</EM></FONT><FONT COLOR="#444444">)</FONT>       <FONT COLOR="#88AA66"><EM>// if the next argument arg is not an option
+</EM></FONT>                    <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>option.defaultValue.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> &gt; <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>       <FONT COLOR="#88AA66"><EM>// then it the value of the previous option
+</EM></FONT>                      <FONT COLOR="#444444">{</FONT>
+                        option.value = args<FONT COLOR="#444444">[</FONT>i+<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">]</FONT>;               <FONT COLOR="#88AA66"><EM>// take this argument as that value
+</EM></FONT>                        i += <FONT COLOR="#33AA33">2</FONT>;                                 <FONT COLOR="#88AA66"><EM>// and skip this argument
+</EM></FONT>                        <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT>;
+                      <FONT COLOR="#444444">}</FONT>
+                <FONT COLOR="#444444">}</FONT>
+
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>option.value == <FONT COLOR="GREEN">null</FONT> &amp;&amp; option.defaultValue.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>    <FONT COLOR="#88AA66"><EM>// this option does not need a value
+</EM></FONT>                option.value = <FONT COLOR="#D2691E"><EM>""</EM></FONT>;                                              <FONT COLOR="#88AA66"><EM>// so just record it as present
+</EM></FONT>              i++;
+            <FONT COLOR="#444444">}</FONT>
+          <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+            <FONT COLOR="#444444">{</FONT>
+              arguments = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">[</FONT>args.length-i<FONT COLOR="#444444">]</FONT>;
+              <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.arraycopy<FONT COLOR="#444444">(</FONT>args,i,arguments,<FONT COLOR="#33AA33">0</FONT>,args.length-i<FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="BROWN"><STRONG>break</STRONG></FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;              <FONT COLOR="#88AA66"><EM>// the parse succeeds!
+</EM></FONT>    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    This defines a class gathering information about an an option.
+    An object of this class will be stored in a Hashmap. Note that the
+    name of the option is part of this stucture. This is to avoid a
+    superfluous lookup for the key when iterating over the elements of
+    the option tables.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>class</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+        Name of the option.
+       
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name;
+      
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+        Value of the option specified on the command line.
+       
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> value;
+      
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+        Value to use if none is specified for this option.
+       
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultValue;
+      
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+        Some description of the purpose of this option.
+       
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> help = <FONT COLOR="#D2691E"><EM>""</EM></FONT>;
+      
+      
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+        Constructs an OptionEntry for option name. It provides a default value.
+       
+                       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>name&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  option</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>defaultValue&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  option's default</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+      <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultValue<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BROWN"><STRONG>this</STRONG></FONT>.name = name;
+          <FONT COLOR="BROWN"><STRONG>this</STRONG></FONT>.defaultValue = defaultValue;
+        <FONT COLOR="#444444">}</FONT>
+
+      
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+        Constructs an OptionEntry for option name. It provides a default value,
+        and some description for help.
+       
+                               
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Parameters:</STRONG></TD><TD>&nbsp;</TD>
+<TD><TABLE>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>name&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  option</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>defaultValue&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  option's default</FONT></TD></TR>
+<TR><TD VALIGN=BASELINE><FONT COLOR="BLACK"><TT>help&nbsp;</TT></FONT></TD><TD><FONT COLOR="BLACK">-  option's description</FONT></TD></TR>
+</TABLE>
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+      <FONT COLOR="#4400DD"><STRONG>OptionEntry</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultValue, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> help<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="BROWN"><STRONG>this</STRONG></FONT>.name = name;
+          <FONT COLOR="BROWN"><STRONG>this</STRONG></FONT>.defaultValue = defaultValue;
+          <FONT COLOR="BROWN"><STRONG>this</STRONG></FONT>.help = help;
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+<FONT COLOR="#444444">}</FONT>
+
+
+</PRE>
+<P>
+<HR>
+<P ALIGN="RIGHT"><FONT COLOR="#F07070"><EM>
+This file was generated on Thu Jan 30 10:08:49 CET 2014 from file <FONT COLOR="BROWN"><KBD>Command.java</KBD></FONT><BR>by the <FONT COLOR="BROWN"><KBD>hlt.language.tools.Hilite</KBD></FONT> Java tool written by <A HREF="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</A></EM></FONT>
+<P>
+<HR>
+</BODY>
+</HTML>

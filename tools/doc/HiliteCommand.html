@@ -1,0 +1,243 @@
+<HTML>
+<HEAD>
+<TITLE>
+HiliteCommand.html
+</TITLE>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="C:/cygwin/home/hak/hlt/classes/resources/Hilite.Style.css">
+</HEAD>
+<BODY BGCOLOR="#CCCFF">
+<CENTER>
+<TABLE BGCOLOR=white WIDTH=50% BORDER=5 CELLPADDING=20>
+<TR><TD ALIGN=CENTER>
+<FONT SIZE=+5><TT><B>HiliteCommand.java</B></TT></FONT>
+<P>
+</TD></TR>
+</TABLE>
+</CENTER>
+<PRE>
+<FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT><FONT COLOR="#88AA66"><EM>// PLEASE DO NOT EDIT WITHOUT THE EXPLICIT CONSENT OF THE AUTHOR! \\
+</EM></FONT><FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+<FONT COLOR="BROWN"><STRONG>package</STRONG></FONT> hlt.language.tools;
+
+
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+  This class implements a simple driver for the <tt>Hilite</tt> class.
+  It subclasses <tt>Command</tt> which supports UNIX-style command line
+  options. It defines the following options
+  <ul>
+  <li><tt><b>!</b></tt>&nbsp;&nbsp; clobber existing files
+  <li><tt><b>d</b></tt>&nbsp;&nbsp; target directory for HTML file(s)
+  <li><tt><b>c</b></tt>&nbsp;&nbsp; configuration file
+  <li><tt><b>o</b></tt>&nbsp;&nbsp; HTML output file
+  <li><tt><b>p</b></tt>&nbsp;&nbsp; package or directory (if more than one file)
+  <li><tt><b>s</b></tt>&nbsp;&nbsp; file separator character
+  </ul>
+ 
+   
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Author:</STRONG></TD><TD>&nbsp;</TD>
+<TD><a href="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>See also:</STRONG></TD><TD>&nbsp;</TD>
+<TD><A HREF="Hilite.html">Hilite</A>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Copyright:</STRONG></TD><TD>&nbsp;</TD>
+<TD>&copy; <a href="http://www.hassan-ait-kaci.net/">by the author</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Version:</STRONG></TD><TD>&nbsp;</TD>
+<TD>Last modified on Thu Nov 01 17:58:17 2012 by hak
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>FileWriter</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>BufferedWriter</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>Date</STRONG></FONT>;
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.io.<FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>;
+
+<FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>class</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>HiliteCommand</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>extends</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Command</STRONG></FONT>
+<FONT COLOR="#444444">{</FONT>
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> helpAndExit <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      printHelp<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.exit<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>BufferedWriter</STRONG></FONT> index;      
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> w <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      index.write<FONT COLOR="#444444">(</FONT>s<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> wl <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>throws</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      index.write<FONT COLOR="#444444">(</FONT>s+<FONT COLOR="#D2691E"><EM>"\n"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> main <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> args<FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> defaultExtension = <FONT COLOR="#D2691E"><EM>".java"</EM></FONT>;
+
+      defineOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"con"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"Hilite.Configuration"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"configuration file"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      defineOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"css"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"style.css"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"CSS style file"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      defineOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"d"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"."</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"target directory"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      defineOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"o"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"output.html"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"HTML output file"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      defineOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"!"</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>""</EM></FONT>,
+                   <FONT COLOR="#D2691E"><EM>"overwrite existing files"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      defineOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"s"</EM></FONT>,
+                   <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT>.separator,
+                   <FONT COLOR="#D2691E"><EM>"file separator character"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>try</STRONG></FONT>
+        <FONT COLOR="#444444">{</FONT>
+          defineOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"p"</EM></FONT>,
+                       <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>""</EM></FONT><FONT COLOR="#444444">)</FONT>.getCanonicalPath<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>,
+                       <FONT COLOR="#D2691E"><EM>"package or directory"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>catch</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT> e<FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** Can't access current directory"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+        <FONT COLOR="#444444">}</FONT>
+
+      setUsage<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\nUsage: hl [options] sourcefile\n"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>parseCommandLine<FONT COLOR="#444444">(</FONT>args<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+          <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.setSeparator<FONT COLOR="#444444">(</FONT>getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"s"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+          <FONT COLOR="BROWN"><STRONG>try</STRONG></FONT>
+            <FONT COLOR="#444444">{</FONT>           
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!argumentIsPresent<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		helpAndExit<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+              <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> arguments = getArguments<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> targetDir
+		= <FONT COLOR="#444444">(</FONT>optionIsPresent<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"d"</EM></FONT><FONT COLOR="#444444">)</FONT> || fileNameDir<FONT COLOR="#444444">(</FONT>arguments<FONT COLOR="#444444">[</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>==<FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>
+                ? getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"d"</EM></FONT><FONT COLOR="#444444">)</FONT>+getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"s"</EM></FONT><FONT COLOR="#444444">)</FONT>
+                : fileNameDir<FONT COLOR="#444444">(</FONT>arguments<FONT COLOR="#444444">[</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>+getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"s"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+              <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> manyFiles = <FONT COLOR="#444444">(</FONT>arguments.length &gt; <FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;
+
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>manyFiles<FONT COLOR="#444444">)</FONT>
+                <FONT COLOR="#444444">{</FONT>
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> title = <FONT COLOR="#D2691E"><EM>"Source files in "</EM></FONT>+getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"p"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+                  index = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>BufferedWriter</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileWriter</STRONG></FONT><FONT COLOR="#444444">(</FONT>targetDir+<FONT COLOR="#D2691E"><EM>"index.html"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;HTML&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;HEAD&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;TITLE&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT>title<FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/TITLE&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/HEAD&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;BODY BGCOLOR=\"#DDDDDD\"&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;CENTER&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;TABLE BGCOLOR=white WIDTH=50% BORDER=5 CELLPADDING=20&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;TR&gt;&lt;TD ALIGN=CENTER&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;FONT SIZE=+3&gt;&lt;B&gt;"</EM></FONT>+title+<FONT COLOR="#D2691E"><EM>"&lt;/B&gt;&lt;/FONT&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;P&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/TD&gt;&lt;/TR&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/TABLE&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/CENTER&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;P&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;OL&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                <FONT COLOR="#444444">}</FONT>
+
+              <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;arguments.length; i++<FONT COLOR="#444444">)</FONT>
+                <FONT COLOR="#444444">{</FONT>
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arg = arguments<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>;
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> dir = fileNameDir<FONT COLOR="#444444">(</FONT>arg<FONT COLOR="#444444">)</FONT>;
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> pre = fileNamePrefix<FONT COLOR="#444444">(</FONT>arg<FONT COLOR="#444444">)</FONT>;
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> suf = fileNameSuffix<FONT COLOR="#444444">(</FONT>arg<FONT COLOR="#444444">)</FONT>;
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> nam = <FONT COLOR="#444444">(</FONT>dir.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>&gt;<FONT COLOR="#33AA33">0</FONT>?<FONT COLOR="#444444">(</FONT>dir+getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"s"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>:<FONT COLOR="#D2691E"><EM>""</EM></FONT><FONT COLOR="#444444">)</FONT>+pre;
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> con = getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"con"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> css = getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"css"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> out = getOption<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"o"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>suf.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>
+                    <FONT COLOR="#444444">{</FONT>
+                      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!<FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>File</STRONG></FONT><FONT COLOR="#444444">(</FONT>nam<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.exists<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> suf = defaultExtension;
+                    <FONT COLOR="#444444">}</FONT>
+                  <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT> suf = <FONT COLOR="#D2691E"><EM>"."</EM></FONT> + suf;
+
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!optionIsPresent<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"o"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> out = pre;
+
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>fileNameSuffix<FONT COLOR="#444444">(</FONT>out<FONT COLOR="#444444">)</FONT>.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>
+                    out += <FONT COLOR="#D2691E"><EM>".html"</EM></FONT>;
+
+                  <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Hilite</STRONG></FONT><FONT COLOR="#444444">(</FONT>nam+suf,con,css,out,targetDir,optionIsPresent<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"!"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+                  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>manyFiles<FONT COLOR="#444444">)</FONT>
+                    <FONT COLOR="#444444">{</FONT>
+                      w<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;LI&gt;&lt;A HREF=\""</EM></FONT>+out+<FONT COLOR="#D2691E"><EM>"\"&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                      wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;TT&gt;&lt;B&gt;"</EM></FONT>+pre+suf+<FONT COLOR="#D2691E"><EM>"&lt;/B&gt;&lt;/TT&gt;&lt;/A&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                    <FONT COLOR="#444444">}</FONT>
+                <FONT COLOR="#444444">}</FONT>
+
+              <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>manyFiles<FONT COLOR="#444444">)</FONT>
+                <FONT COLOR="#444444">{</FONT>
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/OL&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;P&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;HR&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;P ALIGN=\"RIGHT\"&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;FONT COLOR=\"#F07070\"&gt;&lt;EM&gt;\n"</EM></FONT>+
+                     <FONT COLOR="#D2691E"><EM>"This file was generated on "</EM></FONT>+
+                     <FONT COLOR="#444444">(</FONT><FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Date</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>"&lt;BR&gt;"</EM></FONT>+
+                     <FONT COLOR="#D2691E"><EM>"by the &lt;FONT COLOR=\"BROWN\"&gt;&lt;TT&gt;"</EM></FONT>+
+                     <FONT COLOR="#D2691E"><EM>"hlt.language.tools.HiliteCommand&lt;/TT&gt;&lt;/FONT&gt; Java tool"</EM></FONT>+
+                     <FONT COLOR="#D2691E"><EM>" written by &lt;A HREF=\"mailto:hak@acm.org\"&gt;"</EM></FONT>+
+                     <FONT COLOR="#D2691E"><EM>"Hassan A&amp;iuml;t-Kaci&lt;/A&gt;&lt;/EM&gt;&lt;/FONT&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;P&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;HR&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/BODY&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+                  wl<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"&lt;/HTML&gt;"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+                  index.close<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+                  <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.out.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** Wrote file index.html in "</EM></FONT>+targetDir<FONT COLOR="#444444">)</FONT>;
+                <FONT COLOR="#444444">}</FONT>
+            <FONT COLOR="#444444">}</FONT>
+          <FONT COLOR="BROWN"><STRONG>catch</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT> e<FONT COLOR="#444444">)</FONT>
+            <FONT COLOR="#444444">{</FONT>
+              <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT>e<FONT COLOR="#444444">)</FONT>;
+              <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\n*** Couldn't create HTML files"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+            <FONT COLOR="#444444">}</FONT>
+        <FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+<FONT COLOR="#444444">}</FONT>
+
+</PRE>
+<P>
+<HR>
+<P ALIGN="RIGHT"><FONT COLOR="#F07070"><EM>
+This file was generated on Thu Jan 30 10:08:49 CET 2014 from file <FONT COLOR="BROWN"><KBD>HiliteCommand.java</KBD></FONT><BR>by the <FONT COLOR="BROWN"><KBD>hlt.language.tools.Hilite</KBD></FONT> Java tool written by <A HREF="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</A></EM></FONT>
+<P>
+<HR>
+</BODY>
+</HTML>

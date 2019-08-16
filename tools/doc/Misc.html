@@ -1,0 +1,2167 @@
+<HTML>
+<HEAD>
+<TITLE>
+Misc.html
+</TITLE>
+<LINK REL="STYLESHEET" TYPE="text/css" HREF="C:/cygwin/home/hak/hlt/classes/resources/Hilite.Style.css">
+</HEAD>
+<BODY BGCOLOR="#CCCFF">
+<CENTER>
+<TABLE BGCOLOR=white WIDTH=50% BORDER=5 CELLPADDING=20>
+<TR><TD ALIGN=CENTER>
+<FONT SIZE=+5><TT><B>Misc.java</B></TT></FONT>
+<P>
+</TD></TR>
+</TABLE>
+</CENTER>
+<PRE>
+<FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT><FONT COLOR="#88AA66"><EM>// PLEASE DO NOT EDIT WITHOUT THE EXPLICIT CONSENT OF THE AUTHOR! \\
+</EM></FONT><FONT COLOR="#88AA66"><EM>//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+</EM></FONT>
+<FONT COLOR="BROWN"><STRONG>package</STRONG></FONT> hlt.language.tools;
+
+
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+ 
+  This class implements a grab-bag of useful static methods. If you
+  need something that is not defined where you'd expect it although it
+  is useful, can be reused many times, and is generic enough to warrant
+  being used in arbitrary contexts, chances are it's in here - and if
+  it isn't, it should be!
+ 
+ 
+       
+<P><TABLE>
+<TR><TD VALIGN=TOP><STRONG>Author:</STRONG></TD><TD>&nbsp;</TD>
+<TD><a href="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Copyright:</STRONG></TD><TD>&nbsp;</TD>
+<TD>&copy; <a href="http://www.hassan-ait-kaci.net/">by the author</a>
+</TD></tr>
+<TR><TD VALIGN=TOP><STRONG>Version:</STRONG></TD><TD>&nbsp;</TD>
+<TD>Last modified on Fri Sep 10 10:28:14 2012 by hak
+</TD></tr>
+</TABLE>
+
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.io.<FONT COLOR="GREEN">IO</FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.io.<FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>;
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>ViewableStack</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>Queue</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>IntStack</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>Location</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> hlt.language.util.<FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT>;
+
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>AbstractList</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>Calendar</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.util.<FONT COLOR="#4400DD"><STRONG>Date</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>PrintStream</STRONG></FONT>;
+<FONT COLOR="BROWN"><STRONG>import</STRONG></FONT> java.io.<FONT COLOR="#4400DD"><STRONG>InputStream</STRONG></FONT>;
+
+<FONT COLOR="#88AA66"><EM>// import com.rits.cloning.Cloner;	// For deep cloning of any object.
+</EM></FONT>					<FONT COLOR="#88AA66"><EM>// Also needs objenesis package for compiling and running.
+</EM></FONT>
+<FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>class</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Misc</STRONG></FONT>
+<FONT COLOR="#444444">{</FONT>
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Return the correct ordinal suffix for the specified number.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> ordinal <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>n<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#33AA33">1</FONT>:
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"st"</EM></FONT>;
+	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#33AA33">2</FONT>:
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"nd"</EM></FONT>;
+	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#33AA33">3</FONT>:
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"rd"</EM></FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"th"</EM></FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Return the current date as a <tt>java.util.Calendar</tt> object.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Calendar</STRONG></FONT> now <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Calendar</STRONG></FONT>.getInstance<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Return the current year as an int.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> currentYear <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> now<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.get<FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Calendar</STRONG></FONT>.<FONT COLOR="GREEN">YEAR</FONT><FONT COLOR="#444444">)</FONT> - <FONT COLOR="#33AA33">1900</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string of <tt>n</tt> <tt>c</tt>s.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> repeat <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n, <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = n; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT> buf.append<FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the specified string surrounded with the specified char (with <tt>n</tt>
+    on the left, and as many as needed on the right to make the <tt>length</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> title <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> string, <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> c, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> length<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = n; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT> buf.append<FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>;
+      buf.append<FONT COLOR="#444444">(</FONT>string<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=length-n-string.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT> buf.append<FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string describing in min/sec the time specified in milliseconds.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+       
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> minsec <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> time<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      time = time/<FONT COLOR="#33AA33">1000</FONT>;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> mins = <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">(</FONT>time/<FONT COLOR="#33AA33">60</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> secs = <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">(</FONT>time%<FONT COLOR="#33AA33">60</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>""</EM></FONT> + mins + <FONT COLOR="#D2691E"><EM>" minute"</EM></FONT> + <FONT COLOR="#444444">(</FONT>mins &gt; <FONT COLOR="#33AA33">1</FONT> ? <FONT COLOR="#D2691E"><EM>"s "</EM></FONT> : <FONT COLOR="#D2691E"><EM>" "</EM></FONT><FONT COLOR="#444444">)</FONT> +
+	secs + <FONT COLOR="#D2691E"><EM>" second"</EM></FONT> + <FONT COLOR="#444444">(</FONT>secs &gt; <FONT COLOR="#33AA33">1</FONT> ? <FONT COLOR="#D2691E"><EM>"s"</EM></FONT> : <FONT COLOR="#D2691E"><EM>""</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a legible "view" of a stack as a String.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> view <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>ViewableStack</STRONG></FONT> stack, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> offset, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> stackWidth<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>stack == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"null"</EM></FONT>;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> marginWidth = offset + name.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#33AA33">5</FONT>;     <FONT COLOR="#88AA66"><EM>// 5 for " ==&gt; "
+</EM></FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> margin = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>marginWidth<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=marginWidth; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT> margin.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>' '</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> sep = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>stackWidth<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=stackWidth; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT> sep.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'-'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> stackBuffer = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>stack.size<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>*<FONT COLOR="#444444">(</FONT>marginWidth+stackWidth+<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      stackBuffer.append<FONT COLOR="#444444">(</FONT>margin<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>sep<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      stackBuffer.append<FONT COLOR="#444444">(</FONT>margin.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT>,offset<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>name<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>" ==&gt; "</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> i = stack.iterator<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	stackBuffer.append<FONT COLOR="#444444">(</FONT>etc<FONT COLOR="#444444">(</FONT>stackWidth,i.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      stackBuffer.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	stackBuffer.append<FONT COLOR="#444444">(</FONT>margin<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>etc<FONT COLOR="#444444">(</FONT>stackWidth,i.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      stackBuffer.append<FONT COLOR="#444444">(</FONT>margin<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>sep<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> stackBuffer.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a legible "view" of a queue as a String.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> view <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Queue</STRONG></FONT> queue, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> name, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> offset, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> queueWidth<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>queue == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"null"</EM></FONT>;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> marginWidth = offset + name.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#33AA33">5</FONT>;     <FONT COLOR="#88AA66"><EM>// 5 for " ==&gt; "
+</EM></FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> margin = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>marginWidth<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=marginWidth; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT> margin.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>' '</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> sep = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>queueWidth<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=queueWidth; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT> sep.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'-'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> queueBuffer = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>queue.size<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>*<FONT COLOR="#444444">(</FONT>marginWidth+queueWidth+<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      queueBuffer.append<FONT COLOR="#444444">(</FONT>margin<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>sep<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      queueBuffer.append<FONT COLOR="#444444">(</FONT>margin.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT>,offset<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>name<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>" ==&gt; "</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> q = queue.iterator<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>q.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	queueBuffer.append<FONT COLOR="#444444">(</FONT>etc<FONT COLOR="#444444">(</FONT>queueWidth,q.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+      queueBuffer.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>q.hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	queueBuffer.append<FONT COLOR="#444444">(</FONT>margin<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>etc<FONT COLOR="#444444">(</FONT>queueWidth,q.next<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      queueBuffer.append<FONT COLOR="#444444">(</FONT>margin<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT>sep<FONT COLOR="#444444">)</FONT>.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> queueBuffer.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the passed argument string deprived of any single or double
+    quoting if any. A repeatedly quoted form will be stripped of all
+    its layers of quotes - <i>i.e.</i>, <tt>unquotify("'"foo"'")</tt>
+    will return <tt>foo</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> unquotify <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> &lt; <FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s;
+      
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT>s.charAt<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#D2691E"><EM>'"'</EM></FONT> &amp;&amp; s.charAt<FONT COLOR="#444444">(</FONT>s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>-<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#D2691E"><EM>'"'</EM></FONT><FONT COLOR="#444444">)</FONT>
+	  || <FONT COLOR="#444444">(</FONT>s.charAt<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#D2691E"><EM>'\''</EM></FONT> &amp;&amp; s.charAt<FONT COLOR="#444444">(</FONT>s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>-<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="#D2691E"><EM>'\''</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> unquotify<FONT COLOR="#444444">(</FONT>s.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">1</FONT>,s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>-<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a possibly truncated string form no longer than the specified width
+    for the specified object (including trailing " ..." if the string form is
+    longer than the specified width).
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> etc <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> width, <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> object<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>object == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"null"</EM></FONT>;
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s = stringify<FONT COLOR="#444444">(</FONT>object.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>,<FONT COLOR="#D2691E"><EM>'\\'</EM></FONT>,<FONT COLOR="#D2691E"><EM>'\\'</EM></FONT><FONT COLOR="#444444">)</FONT>; <FONT COLOR="#88AA66"><EM>// leave double quotes unescaped
+</EM></FONT>      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> &lt;= width ? s : s.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT>,<FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.min<FONT COLOR="#444444">(</FONT>width-<FONT COLOR="#33AA33">4</FONT>,s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>" ..."</EM></FONT>;
+    <FONT COLOR="#444444">}</FONT>  
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string for the specified array of ints, using the specified
+    start, separator, and end strings.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arrayToString <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> start, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> separator, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> end<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"null"</EM></FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>start<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;a.length; i++<FONT COLOR="#444444">)</FONT>
+	buf.append<FONT COLOR="#444444">(</FONT>a<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>+<FONT COLOR="#444444">(</FONT>i==a.length-<FONT COLOR="#33AA33">1</FONT>?<FONT COLOR="#D2691E"><EM>""</EM></FONT>:separator<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.append<FONT COLOR="#444444">(</FONT>end<FONT COLOR="#444444">)</FONT>.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string for the specified array of ints as a
+    square-bracketed comma-sparated list of its elements.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arrayToString <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> arrayToString<FONT COLOR="#444444">(</FONT>a,<FONT COLOR="#D2691E"><EM>"["</EM></FONT>,<FONT COLOR="#D2691E"><EM>","</EM></FONT>,<FONT COLOR="#D2691E"><EM>"]"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string for the specified array of doubles.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arrayToString
+    <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> start, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> separator, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> end<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"null"</EM></FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>start<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;a.length; i++<FONT COLOR="#444444">)</FONT>
+	buf.append<FONT COLOR="#444444">(</FONT>a<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>+<FONT COLOR="#444444">(</FONT>i==a.length-<FONT COLOR="#33AA33">1</FONT>?<FONT COLOR="#D2691E"><EM>""</EM></FONT>:separator<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.append<FONT COLOR="#444444">(</FONT>end<FONT COLOR="#444444">)</FONT>.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string for the specified array of doubles as a
+    square-bracketed comma-sparated list of its elements.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arrayToString <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> arrayToString<FONT COLOR="#444444">(</FONT>a,<FONT COLOR="#D2691E"><EM>"["</EM></FONT>,<FONT COLOR="#D2691E"><EM>","</EM></FONT>,<FONT COLOR="#D2691E"><EM>"]"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string for the specified array of objects.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arrayToString
+    <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> start, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> separator, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> end<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"null"</EM></FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>start<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;a.length; i++<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> o = a<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>;
+	  <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s
+	    = o == <FONT COLOR="GREEN">null</FONT>             ? <FONT COLOR="#D2691E"><EM>"null"</EM></FONT>
+	    : o <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT>    ? arrayToString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>o,start,separator,end<FONT COLOR="#444444">)</FONT>
+	    : o <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> ? arrayToString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>o,start,separator,end<FONT COLOR="#444444">)</FONT>
+	    : o <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> ? arrayToString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>o,start,separator,end<FONT COLOR="#444444">)</FONT>
+	    : o <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>   ? <FONT COLOR="#D2691E"><EM>"\""</EM></FONT>+o.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>"\""</EM></FONT>
+	                            : o.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+	  buf.append<FONT COLOR="#444444">(</FONT>s+<FONT COLOR="#444444">(</FONT>i==a.length-<FONT COLOR="#33AA33">1</FONT>?<FONT COLOR="#D2691E"><EM>""</EM></FONT>:separator<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.append<FONT COLOR="#444444">(</FONT>end<FONT COLOR="#444444">)</FONT>.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string for the specified array of Objects as a
+    square-bracketed comma-sparated list of its elements.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> arrayToString <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> arrayToString<FONT COLOR="#444444">(</FONT>a,<FONT COLOR="#D2691E"><EM>"["</EM></FONT>,<FONT COLOR="#D2691E"><EM>","</EM></FONT>,<FONT COLOR="#D2691E"><EM>"]"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the two arrays have equal elements.
+    <b>NB:</b> <tt>null</tt> arrays are considered equal.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> equal <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a1, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a2<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> a2 == <FONT COLOR="GREEN">null</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1 == a2<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1.length != a2.length<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;a1.length; i++<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> != a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the two arrays have equal elements.
+    <b>NB:</b> <tt>null</tt> arrays are considered equal.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> equal <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a1, <FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a2<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> a2 == <FONT COLOR="GREEN">null</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1 == a2<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1.length != a2.length<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;a1.length; i++<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> != a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the two arrays have equal elements.
+    <b>NB:</b> <tt>null</tt> arrays are considered equal.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> equal <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a1, <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a2<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> a2 == <FONT COLOR="GREEN">null</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1 == a2<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1.length != a2.length<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;a1.length; i++<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> &amp;&amp; a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="#444444">{</FONT>
+	      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!equal<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>,<FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	      <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT>;
+	    <FONT COLOR="#444444">}</FONT>
+
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> &amp;&amp; a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="#444444">{</FONT>
+	      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!equal<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>,<FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>double</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	      <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT>;
+	    <FONT COLOR="#444444">}</FONT>
+
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> &amp;&amp; a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> <FONT COLOR="BROWN"><STRONG>instanceof</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="#444444">{</FONT>
+	      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!equal<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>,<FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	      <FONT COLOR="BROWN"><STRONG>continue</STRONG></FONT>;
+	    <FONT COLOR="#444444">}</FONT>
+
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!a1<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>.equals<FONT COLOR="#444444">(</FONT>a2<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the qualified name of the class of the specified object.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> className <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> object<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> object.getClass<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">6</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the unqualified name of the class of the specified object.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> simpleClassName <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> object<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>FileTools</STRONG></FONT>.suffixIfDot<FONT COLOR="#444444">(</FONT>className<FONT COLOR="#444444">(</FONT>object<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns an <tt>ArrayList</tt> containing the elements of specified array.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT> list <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> obs<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT> list = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>ArrayList</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;obs.length; i++<FONT COLOR="#444444">)</FONT>
+	list.add<FONT COLOR="#444444">(</FONT>obs<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> list;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Return <tt>true</tt> iff the two specified locations are the same.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> sameLocation <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Location</STRONG></FONT> l1, <FONT COLOR="#4400DD"><STRONG>Location</STRONG></FONT> l2<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l1 == l2<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l1 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+	<FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+      <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	<FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	<FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> l1.getFile<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == l2.getFile<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+	    &amp;&amp; l1.getLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == l2.getLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+	    &amp;&amp; l1.getColumn<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == l2.getColumn<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Return <tt>true</tt> iff the two specified locatables have the same extent.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> sameExtent <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> l1, <FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> l2<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l1 == l2<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l1 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+	<FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+      <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	<FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	<FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> sameLocation<FONT COLOR="#444444">(</FONT>l1.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>,l1.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	    &amp;&amp; sameLocation<FONT COLOR="#444444">(</FONT>l2.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>,l2.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> if the first location "precedes" the second one.
+    That is, if the second one is nested in, or to the right of, the first
+    one. This makes sense only for if the locatables span a the same file.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> precedes <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> l1, <FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> l2<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l1 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l1.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="GREEN">null</FONT> || l1.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l2.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="GREEN">null</FONT> || l2.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> l1.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.precedes<FONT COLOR="#444444">(</FONT>l2.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	|| l1.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.precedes<FONT COLOR="#444444">(</FONT>l2.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> &amp;&amp; l2.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.precedes<FONT COLOR="#444444">(</FONT>l1.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the locatable that is "further down". That is, the one that is
+    nested in, or to the right of, the other. This makes sense only for if
+    the locatables are within the same file.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> latestExtent <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> l1, <FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> l2<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l1 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> l2;
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>l2 == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> l1;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> precedes<FONT COLOR="#444444">(</FONT>l1,l2<FONT COLOR="#444444">)</FONT> ? l2 : l1;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns an explicit string for the specified locatable.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> locationString <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Locatable</STRONG></FONT> extent<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s = <FONT COLOR="#D2691E"><EM>"&lt;unlocated&gt;"</EM></FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>extent != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="#4400DD"><STRONG>Location</STRONG></FONT> start = extent.getStart<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	  <FONT COLOR="#4400DD"><STRONG>Location</STRONG></FONT> end = extent.getEnd<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>start == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>end == <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	      ;
+	    <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	      s = locationString<FONT COLOR="#444444">(</FONT>end<FONT COLOR="#444444">)</FONT>;
+	  <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	    <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>end == <FONT COLOR="GREEN">null</FONT> || start.equals<FONT COLOR="#444444">(</FONT>end<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	      s = locationString<FONT COLOR="#444444">(</FONT>start<FONT COLOR="#444444">)</FONT>;
+	    <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+	      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>start.getFile<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == end.getFile<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		<FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>start.getLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> == end.getLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		  s = start.getFile<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>" ("</EM></FONT> + <FONT COLOR="#D2691E"><EM>"line "</EM></FONT> + start.getLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>", "</EM></FONT>
+		    + <FONT COLOR="#D2691E"><EM>"columns "</EM></FONT> + start.getColumn<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>".."</EM></FONT> +end.getColumn<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>")"</EM></FONT>;
+		<FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+		  s = locationString<FONT COLOR="#444444">(</FONT>start<FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>".."</EM></FONT> + <FONT COLOR="#D2691E"><EM>" ("</EM></FONT> + <FONT COLOR="#D2691E"><EM>"line "</EM></FONT> + end.getLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>", "</EM></FONT>
+		    + <FONT COLOR="#D2691E"><EM>"column "</EM></FONT> + end.getColumn<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>")"</EM></FONT>;
+	      <FONT COLOR="BROWN"><STRONG>else</STRONG></FONT>
+		s = locationString<FONT COLOR="#444444">(</FONT>start<FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>".."</EM></FONT> + locationString<FONT COLOR="#444444">(</FONT>end<FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns an explicit string for the specified location.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> locationString <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Location</STRONG></FONT> location<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> location.getFile<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> +
+	<FONT COLOR="#D2691E"><EM>" ("</EM></FONT> + <FONT COLOR="#D2691E"><EM>"line "</EM></FONT>   + location.getLine<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> + <FONT COLOR="#D2691E"><EM>", "</EM></FONT> + <FONT COLOR="#D2691E"><EM>"column "</EM></FONT> + location.getColumn<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>")"</EM></FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    A method that beeps.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> beep <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.print<FONT COLOR="#444444">(</FONT><FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">BIP</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.flush<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string obtained from the specified string as an
+    identical one except that special characters are rendered as their
+    escape sequences.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> stringify <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> stringify<FONT COLOR="#444444">(</FONT>s,<FONT COLOR="#D2691E"><EM>'"'</EM></FONT>,<FONT COLOR="#D2691E"><EM>'\\'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string obtained from the specified string as an
+    identical one except that special characters are rendered as their
+    escape sequences. The last two arguments are the quote and escape
+    characters.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> stringify <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s, <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> quote, <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> escape<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> length = s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;length; i++<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> c = s.charAt<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c == quote || c == escape<FONT COLOR="#444444">)</FONT>
+	    buf.append<FONT COLOR="#444444">(</FONT>escape<FONT COLOR="#444444">)</FONT>;
+	  buf.append<FONT COLOR="#444444">(</FONT>pform<FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string obtained from the specified string
+    transformed so that it would give the original string
+    when double quoted and using backslash as the escape character.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> quotify <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> quotify<FONT COLOR="#444444">(</FONT>s,<FONT COLOR="#D2691E"><EM>'"'</EM></FONT>,<FONT COLOR="#D2691E"><EM>'\\'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string obtained from the specified string
+    transformed so that it would give the original string
+    when quoted. The specified <tt>quote</tt> and <tt>escape</tt>
+    are the quote and escape characters, respectively.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> quotify <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s, <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> quote, <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> escape<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> length = s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;length; i++<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> c = s.charAt<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c == quote || c == escape<FONT COLOR="#444444">)</FONT>
+	    buf.append<FONT COLOR="#444444">(</FONT>escape<FONT COLOR="#444444">)</FONT>;
+	  buf.append<FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string obtained from the specified string
+    after changing its first character to a capital.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> capitalize <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.toUpperCase<FONT COLOR="#444444">(</FONT>s.charAt<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>+s.substring<FONT COLOR="#444444">(</FONT><FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the given string contains at least one
+    letter, and all its letters are lower case letters.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isLowerCase <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> hasOneLetter = <FONT COLOR="GREEN">false</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> l = s.charAt<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+	  hasOneLetter |= <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isLetter<FONT COLOR="#444444">(</FONT>l<FONT COLOR="#444444">)</FONT>;
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isUpperCase<FONT COLOR="#444444">(</FONT>l<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> hasOneLetter;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the given string contains at least one
+    letter, and all its letters are upper case letters.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> isUpperCase <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> hasOneLetter = <FONT COLOR="GREEN">false</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; i--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> l = s.charAt<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+	  hasOneLetter |= <FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isLetter<FONT COLOR="#444444">(</FONT>l<FONT COLOR="#444444">)</FONT>;
+	  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isLowerCase<FONT COLOR="#444444">(</FONT>l<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> hasOneLetter;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string obtained from the specified string
+    after substituting characters that are special to HTML
+    by their HTML encoding string.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> htmlString <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> buff = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; i++<FONT COLOR="#444444">)</FONT>
+	buff.append<FONT COLOR="#444444">(</FONT>htmlCode<FONT COLOR="#444444">(</FONT>s.charAt<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buff.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the HTML encoding string of the specified character.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> htmlCode <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'&lt;'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&amp;lt;"</EM></FONT>;
+	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'&gt;'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&amp;gt;"</EM></FONT>;
+	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'&amp;'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"&amp;amp;"</EM></FONT>;
+	<FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Asks the user for a Y/N answer and returns it boolean
+    interpretation - the default answer is yes.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> askYesNo <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> askYesNo<FONT COLOR="#444444">(</FONT>s,<FONT COLOR="GREEN">true</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+    
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Asks the user for a Y/N answer with the specified default answer,
+    with default answer specified as boolean <tt>yesno</tt>, using
+    standard input/output streams.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> askYesNo <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> prompt, <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> yesno<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> askYesNo<FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.out,<FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.in,<FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err,prompt,yesno<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Asks the user for a Y/N answer with the specified default answer,
+    with default answer specified as boolean <tt>yesno</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> askYesNo <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>PrintStream</STRONG></FONT> out, <FONT COLOR="#4400DD"><STRONG>InputStream</STRONG></FONT> in, <FONT COLOR="#4400DD"><STRONG>PrintStream</STRONG></FONT> err, <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> prompt, <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> yesno<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      out.print<FONT COLOR="#444444">(</FONT>prompt+<FONT COLOR="#D2691E"><EM>"? (y/n) ["</EM></FONT>+<FONT COLOR="#444444">(</FONT>yesno?<FONT COLOR="#D2691E"><EM>"y"</EM></FONT>:<FONT COLOR="#D2691E"><EM>"n"</EM></FONT><FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>"] &gt; "</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      out.flush<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>try</STRONG></FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>in.read<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="#444444">{</FONT>
+	    <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT>:
+	      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> yesno;
+	    <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'y'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'Y'</EM></FONT>:
+	      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>in.read<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> != <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">true</FONT>;
+	    <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'n'</EM></FONT>: <FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="#D2691E"><EM>'N'</EM></FONT>:
+	      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>in.read<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> != <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	    <FONT COLOR="BROWN"><STRONG>default</STRONG></FONT>:
+	      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>in.read<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> != <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	    <FONT COLOR="#444444">}</FONT>
+	<FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>catch</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT> e<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** IO Exception when asking: \""</EM></FONT>+prompt+<FONT COLOR="#D2691E"><EM>"\""</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  e.printStackTrace<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      out.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"Please answer yes or no!..."</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> askYesNo<FONT COLOR="#444444">(</FONT>prompt,yesno<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Prompts the user with the specified string on the specified
+    PrintStream, then returns the string entered up to carriage
+    return on stdin.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> prompt <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s, <FONT COLOR="#4400DD"><STRONG>PrintStream</STRONG></FONT> out<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      out.print<FONT COLOR="#444444">(</FONT>s+<FONT COLOR="#D2691E"><EM>" "</EM></FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> ans = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> ch;
+
+      <FONT COLOR="BROWN"><STRONG>try</STRONG></FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT>ch=<FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.in.read<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> != <FONT COLOR="#D2691E"><EM>'\n'</EM></FONT><FONT COLOR="#444444">)</FONT>
+	    ans.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>ch<FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>catch</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>IOException</STRONG></FONT> e<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** IO Exception when prompting: \""</EM></FONT>+s+<FONT COLOR="#D2691E"><EM>"\""</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  e.printStackTrace<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> ans.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Prompts the user with the specified string on stdout, then
+    returns the string entered up to carriage return on stdin.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> prompt <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> prompt<FONT COLOR="#444444">(</FONT>s,<FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.out<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string of <tt>n</tt> blank spaces.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> spaces <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n<FONT COLOR="#444444">)</FONT>
+  <FONT COLOR="#444444">{</FONT>
+    <FONT COLOR="#4400DD"><STRONG>StringBuffer</STRONG></FONT> buf = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuffer</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=n; n--&gt;<FONT COLOR="#33AA33">0</FONT>;<FONT COLOR="#444444">)</FONT>
+      buf.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>" "</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> buf.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+  <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Prints the given string on the standard output
+    then backs over the length of it. This is useful
+    for an in-place counter.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> printErase <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.out.print<FONT COLOR="#444444">(</FONT>s<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>; i++<FONT COLOR="#444444">)</FONT> <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.out.print<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\b"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>    
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the substring of the given string that starts
+    at the first letter occurrence in the string. If none
+    returns the full string.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> letterSubstring <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i = <FONT COLOR="#33AA33">0</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i&lt;s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> &amp;&amp; !<FONT COLOR="#4400DD"><STRONG>Character</STRONG></FONT>.isLetter<FONT COLOR="#444444">(</FONT>s.charAt<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> i++;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i == s.length<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s.substring<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>    
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a printable form of the given character code.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> pform <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>switch</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">EOF</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"EOF"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// End of file
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">EOI</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"EOI"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// End of input
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">SOI</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"SOI"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Start of input
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">WRD</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"WRD"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Word
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">NUM</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"NUM"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Number
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">NTG</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"NTG"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Nothing
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">SPL</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"SPL"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Special
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">BIP</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"BIP"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Beep
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">EOL</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"\\n"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// End of line
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">TAB</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"\\t"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Tab
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">CRT</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"\\r"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Carriage return
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">BSP</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"\\b"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Backspace
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">FFD</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"\\f"</EM></FONT>; <FONT COLOR="#88AA66"><EM>// Form feed
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">BSL</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"\\"</EM></FONT>;  <FONT COLOR="#88AA66"><EM>// Backslash
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">SQT</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"'"</EM></FONT>;   <FONT COLOR="#88AA66"><EM>// Single quote
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">DQT</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"\""</EM></FONT>;  <FONT COLOR="#88AA66"><EM>// Double quote
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>case</STRONG></FONT> <FONT COLOR="GREEN">IO</FONT>.<FONT COLOR="GREEN">BQT</FONT>: <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"`"</EM></FONT>;   <FONT COLOR="#88AA66"><EM>// Back quote
+</EM></FONT>	<FONT COLOR="BROWN"><STRONG>default</STRONG></FONT>:     <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT>.valueOf<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT>c<FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string representation of the given integer <tt>n</tt>
+    using as many <tt>pad</tt> characters on the left, using at least
+    <tt>width</tt> digits in total.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> numberString <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> n, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> width, <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> pad<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n_width = numWidth<FONT COLOR="#444444">(</FONT>n<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> str = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;width-n_width; i++<FONT COLOR="#444444">)</FONT>
+	str.append<FONT COLOR="#444444">(</FONT>pad<FONT COLOR="#444444">)</FONT>;
+
+      str.append<FONT COLOR="#444444">(</FONT>n<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> str.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string representation of the given long integer <tt>n</tt>
+    using as many blank spaces on the left, using at least <tt>width</tt>
+    digits in total.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> numberString <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> n, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> width<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> numberString<FONT COLOR="#444444">(</FONT>n,width,<FONT COLOR="#D2691E"><EM>' '</EM></FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string representation of the given integer <tt>n</tt>
+    using as many zeros on the left, using at least <tt>width</tt>
+    digits in total.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> zeroPaddedString <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> width<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>n &lt; <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"-"</EM></FONT>+zeroPaddedString<FONT COLOR="#444444">(</FONT>-n,width<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> numberString<FONT COLOR="#444444">(</FONT>n,width,<FONT COLOR="#D2691E"><EM>'\060'</EM></FONT><FONT COLOR="#444444">)</FONT>;        <FONT COLOR="#88AA66"><EM>// '\060' = ascii code of 0
+</EM></FONT>    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the number of decimal digits necessary to write the
+    given long integer <tt>n</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> numWidth <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> n<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>n &lt; <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#33AA33">1</FONT>+numWidth<FONT COLOR="#444444">(</FONT>-n<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> w = <FONT COLOR="#33AA33">1</FONT>;
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT>n /= <FONT COLOR="#33AA33">10</FONT><FONT COLOR="#444444">)</FONT> != <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> w++;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> w;
+    <FONT COLOR="#444444">}</FONT>
+      
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns <tt>true</tt> iff the given string is a positive
+    word (<i>i.e.</i>, true, t, yes, y). It is case independent.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> booleanValueOf <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> s<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT>s != <FONT COLOR="GREEN">null</FONT><FONT COLOR="#444444">)</FONT>
+	      &amp;&amp; <FONT COLOR="#444444">(</FONT>s.toLowerCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.equals<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"t"</EM></FONT><FONT COLOR="#444444">)</FONT>
+		  || s.toLowerCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.equals<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"true"</EM></FONT><FONT COLOR="#444444">)</FONT>
+		  || s.toLowerCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.equals<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"y"</EM></FONT><FONT COLOR="#444444">)</FONT>
+		  || s.toLowerCase<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>.equals<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"yes"</EM></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+  
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the string representation of the given integer in
+    the given radix.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> valueInRadix<FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> radix<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>radix &lt; <FONT COLOR="#33AA33">1</FONT> || radix &gt; <FONT COLOR="#33AA33">36</FONT><FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#88AA66"><EM>// there are only 36 alphanumerical digits
+</EM></FONT>	<FONT COLOR="#444444">{</FONT> <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"Cannot handle radix: "</EM></FONT>+radix+
+			     <FONT COLOR="#D2691E"><EM>" (must be between 1 and 36)"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="BROWN"><STRONG>throw</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>NumberFormatException</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>n &lt; <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#D2691E"><EM>"-"</EM></FONT>+valueInRadix<FONT COLOR="#444444">(</FONT>-n,radix<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>radix == <FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> ones<FONT COLOR="#444444">(</FONT>n<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> numeral = <FONT COLOR="#D2691E"><EM>""</EM></FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>do</STRONG></FONT>
+	<FONT COLOR="#444444">{</FONT> numeral = digit<FONT COLOR="#444444">(</FONT>n % radix<FONT COLOR="#444444">)</FONT> + numeral;
+	n /= radix;
+	<FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>n != <FONT COLOR="#33AA33">0</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> numeral;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns the character whose code is the given integer.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>char</STRONG></FONT> digit <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> c<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>c &gt;= <FONT COLOR="#33AA33">0</FONT> &amp;&amp; c &lt;= <FONT COLOR="#33AA33">9</FONT><FONT COLOR="#444444">)</FONT> <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'0'</EM></FONT>+c<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>char</STRONG></FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>'A'</EM></FONT>+c-<FONT COLOR="#33AA33">10</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>      
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Returns a string of <tt>n</tt> 1's.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+ 
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>String</STRONG></FONT> ones <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> n<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT> s = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>StringBuilder</STRONG></FONT><FONT COLOR="#444444">(</FONT>n<FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>for</STRONG></FONT> <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i=<FONT COLOR="#33AA33">0</FONT>; i&lt;n; i++<FONT COLOR="#444444">)</FONT> s.append<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"1"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> s.toString<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>      
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Quietly forces garbage collection.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> forceGC <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      forceGC<FONT COLOR="#444444">(</FONT><FONT COLOR="GREEN">false</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Forces garbage collection, and reports it on the standard error stream if the
+    given boolean argument is <tt>true</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> forceGC <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> sayit<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      forceGC<FONT COLOR="#444444">(</FONT>sayit,<FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.err<FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Forces garbage collection, and reports it on the specified stream if the
+    given boolean argument is <tt>true</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> forceGC <FONT COLOR="#444444">(</FONT><FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> sayit, <FONT COLOR="#4400DD"><STRONG>PrintStream</STRONG></FONT> stream<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="#4400DD"><STRONG>Runtime</STRONG></FONT> rt = <FONT COLOR="#4400DD"><STRONG>Runtime</STRONG></FONT>.getRuntime<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> total = rt.totalMemory<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> currentFree = rt.freeMemory<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      <FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> used = total-currentFree;
+      <FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> originalFree = currentFree;
+      <FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> previousFree;
+      <FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> time;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> max_width;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>sayit<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  max_width = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>numWidth<FONT COLOR="#444444">(</FONT>used<FONT COLOR="#444444">)</FONT>,
+			       <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>numWidth<FONT COLOR="#444444">(</FONT>currentFree<FONT COLOR="#444444">)</FONT>,
+					numWidth<FONT COLOR="#444444">(</FONT>total<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** Memory usage before garbage collection:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\t"</EM></FONT>+numberString<FONT COLOR="#444444">(</FONT>total,max_width<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>" bytes total"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\t"</EM></FONT>+numberString<FONT COLOR="#444444">(</FONT>used,max_width<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>" bytes used"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\t"</EM></FONT>+numberString<FONT COLOR="#444444">(</FONT>currentFree,max_width<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>" bytes available"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+      time = <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.currentTimeMillis<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>do</STRONG></FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  rt.runFinalization<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	  rt.gc<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	  previousFree = currentFree;
+	  currentFree = rt.freeMemory<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>currentFree &gt; previousFree<FONT COLOR="#444444">)</FONT>;
+
+      time = <FONT COLOR="#4400DD"><STRONG>System</STRONG></FONT>.currentTimeMillis<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>-time;
+
+      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>sayit<FONT COLOR="#444444">)</FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BLUE"><STRONG>long</STRONG></FONT> reclaimed = currentFree-originalFree;
+	  used = total-currentFree;
+	  max_width = <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>numWidth<FONT COLOR="#444444">(</FONT>used<FONT COLOR="#444444">)</FONT>,
+			       <FONT COLOR="#4400DD"><STRONG>Math</STRONG></FONT>.max<FONT COLOR="#444444">(</FONT>numWidth<FONT COLOR="#444444">(</FONT>currentFree<FONT COLOR="#444444">)</FONT>,
+					numWidth<FONT COLOR="#444444">(</FONT>reclaimed<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** Garbage collection done in "</EM></FONT>+time+<FONT COLOR="#D2691E"><EM>" ms"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"*** Memory usage after garbage collection:"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\t"</EM></FONT>+numberString<FONT COLOR="#444444">(</FONT>reclaimed,max_width<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>" bytes reclaimed"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\t"</EM></FONT>+numberString<FONT COLOR="#444444">(</FONT>used,max_width<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>" bytes used"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	  stream.println<FONT COLOR="#444444">(</FONT><FONT COLOR="#D2691E"><EM>"\t"</EM></FONT>+numberString<FONT COLOR="#444444">(</FONT>currentFree,max_width<FONT COLOR="#444444">)</FONT>+<FONT COLOR="#D2691E"><EM>" bytes available"</EM></FONT><FONT COLOR="#444444">)</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Sorts the specified array of comparable objects in place. It
+    assumes that the class of objects stored in the array implements
+    the <a href="../util/Comparable.html">
+    <tt>hlt.language.util.Comparable</tt></a> interface. The algorithm
+    used is (non-recursive) QuickSort. It returns the specified array.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> sort <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> sort<FONT COLOR="#444444">(</FONT>a,<FONT COLOR="#33AA33">0</FONT>,a.length-<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Sorts the elements between index fst and lst (both inclusive) in
+    the specified array of comparable objects in place. It assumes that
+    the class of objects stored in the array implements the <a
+    href="../util/Comparable.html">
+    <tt>hlt.language.util.Comparable</tt></a> interface. The algorithm
+    used is (non-recursive) <a
+    href="http://en.wikipedia.org/wiki/Quicksort">QuickSort</a>. It
+    returns the specified array.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> sort <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT><FONT COLOR="#444444">[</FONT><FONT COLOR="#444444">]</FONT> a, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> fst, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> lst<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i, j;
+      <FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT> m, temp;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> lo = fst;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> hi = lst;
+
+      <FONT COLOR="#4400DD"><STRONG>IntStack</STRONG></FONT> stack = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IntStack</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      stack.push<FONT COLOR="#444444">(</FONT>hi<FONT COLOR="#444444">)</FONT>;
+      stack.push<FONT COLOR="#444444">(</FONT>lo<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>do</STRONG></FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  lo = stack.pop<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	  hi = stack.pop<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+	  <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>lo &lt; hi<FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="#444444">{</FONT>
+	      i = lo;
+	      j = hi;
+	      m = a<FONT COLOR="#444444">[</FONT>lo+<FONT COLOR="#444444">(</FONT>hi-lo<FONT COLOR="#444444">)</FONT>/<FONT COLOR="#33AA33">2</FONT><FONT COLOR="#444444">]</FONT>; <FONT COLOR="#88AA66"><EM>// instead of (lo+hi)/2 to avoid potential overflow
+</EM></FONT>
+	      <FONT COLOR="BROWN"><STRONG>do</STRONG></FONT>
+		<FONT COLOR="#444444">{</FONT>
+		  <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i&lt;a.length &amp;&amp; a<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>.lessThan<FONT COLOR="#444444">(</FONT>m<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		    i++;
+
+		  <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>j&gt;=<FONT COLOR="#33AA33">0</FONT> &amp;&amp; m.lessThan<FONT COLOR="#444444">(</FONT>a<FONT COLOR="#444444">[</FONT>j<FONT COLOR="#444444">]</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		    j--;
+
+		  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt;= j<FONT COLOR="#444444">)</FONT>
+		    <FONT COLOR="#444444">{</FONT>
+		      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i != j<FONT COLOR="#444444">)</FONT>
+			<FONT COLOR="#444444">{</FONT>
+			  temp = a<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT>;
+			  a<FONT COLOR="#444444">[</FONT>i<FONT COLOR="#444444">]</FONT> = a<FONT COLOR="#444444">[</FONT>j<FONT COLOR="#444444">]</FONT>;
+			  a<FONT COLOR="#444444">[</FONT>j<FONT COLOR="#444444">]</FONT> = temp;
+			<FONT COLOR="#444444">}</FONT>
+		      i++;
+		      j--;
+		    <FONT COLOR="#444444">}</FONT>
+		<FONT COLOR="#444444">}</FONT>
+	      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt;= j<FONT COLOR="#444444">)</FONT>;
+
+	      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt; hi<FONT COLOR="#444444">)</FONT>
+		<FONT COLOR="#444444">{</FONT>
+		  stack.push<FONT COLOR="#444444">(</FONT>hi<FONT COLOR="#444444">)</FONT>;
+		  stack.push<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+		<FONT COLOR="#444444">}</FONT>
+
+	      hi = j;
+	    <FONT COLOR="#444444">}</FONT>
+	<FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!stack.isEmpty<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> a;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Sorts the specified <tt>AbstractList</tt> in place. It assumes that the
+    class of objects stored in the <tt>AbstractList</tt> implements the
+    <a href="../util/Comparable.html"><tt>hlt.language.util.Comparable</tt></a>
+    interface. The algorithm used is (non-recursive) QuickSort. It returns the
+    specified <tt>AbstractList</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>AbstractList</STRONG></FONT> sort <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>AbstractList</STRONG></FONT> a<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> sort<FONT COLOR="#444444">(</FONT>a,<FONT COLOR="#33AA33">0</FONT>,a.size<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>-<FONT COLOR="#33AA33">1</FONT><FONT COLOR="#444444">)</FONT>;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    Sorts the elements between index fst and lst (both inclusive) in
+    the specified <tt>AbstractList</tt> in place. It assumes that the
+    class of objects stored in the <tt>AbstractList</tt> implements the
+    <a
+    href="../util/Comparable.html"><tt>hlt.language.util.Comparable</tt></a>
+    interface. The algorithm used is (non-recursive) <a
+    href="http://en.wikipedia.org/wiki/Quicksort">QuickSort</a>. It
+    returns the specified <tt>AbstractList</tt>.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>AbstractList</STRONG></FONT> sort <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>AbstractList</STRONG></FONT> a, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> fst, <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> lst<FONT COLOR="#444444">)</FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> i, j;
+      <FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT> m;
+      <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> temp;
+
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> lo = fst;
+      <FONT COLOR="BLUE"><STRONG>int</STRONG></FONT> hi = lst;
+
+      <FONT COLOR="#4400DD"><STRONG>IntStack</STRONG></FONT> stack = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>IntStack</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+      stack.push<FONT COLOR="#444444">(</FONT>hi<FONT COLOR="#444444">)</FONT>;
+      stack.push<FONT COLOR="#444444">(</FONT>lo<FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>do</STRONG></FONT>
+	<FONT COLOR="#444444">{</FONT>
+	  lo = stack.pop<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+	  hi = stack.pop<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+	  <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>lo &lt; hi<FONT COLOR="#444444">)</FONT>
+	    <FONT COLOR="#444444">{</FONT>
+	      i = lo;
+	      j = hi;
+	      m = <FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT><FONT COLOR="#444444">)</FONT>a.get<FONT COLOR="#444444">(</FONT>lo+<FONT COLOR="#444444">(</FONT>hi-lo<FONT COLOR="#444444">)</FONT>/<FONT COLOR="#33AA33">2</FONT><FONT COLOR="#444444">)</FONT>; <FONT COLOR="#88AA66"><EM>// instead of (lo+hi)/2 to avoid potential overflow
+</EM></FONT>
+	      <FONT COLOR="BROWN"><STRONG>do</STRONG></FONT>
+		<FONT COLOR="#444444">{</FONT>
+		  <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i&lt;a.size<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT> &amp;&amp; <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT><FONT COLOR="#444444">)</FONT>a.get<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>.lessThan<FONT COLOR="#444444">(</FONT>m<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		    i++;
+
+		  <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>j&gt;=<FONT COLOR="#33AA33">0</FONT> &amp;&amp; m.lessThan<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#4400DD"><STRONG>Comparable</STRONG></FONT><FONT COLOR="#444444">)</FONT>a.get<FONT COLOR="#444444">(</FONT>j<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>
+		    j--;
+
+		  <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt;= j<FONT COLOR="#444444">)</FONT>
+		    <FONT COLOR="#444444">{</FONT>
+		      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i != j<FONT COLOR="#444444">)</FONT>
+			<FONT COLOR="#444444">{</FONT>
+			  temp = a.get<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+			  a.set<FONT COLOR="#444444">(</FONT>i,a.get<FONT COLOR="#444444">(</FONT>j<FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+			  a.set<FONT COLOR="#444444">(</FONT>j,temp<FONT COLOR="#444444">)</FONT>;
+			<FONT COLOR="#444444">}</FONT>
+		      i++;
+		      j--;
+		    <FONT COLOR="#444444">}</FONT>
+		<FONT COLOR="#444444">}</FONT>
+	      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt;= j<FONT COLOR="#444444">)</FONT>;
+
+
+	      <FONT COLOR="BROWN"><STRONG>if</STRONG></FONT> <FONT COLOR="#444444">(</FONT>i &lt; hi<FONT COLOR="#444444">)</FONT>
+		<FONT COLOR="#444444">{</FONT>
+		  stack.push<FONT COLOR="#444444">(</FONT>hi<FONT COLOR="#444444">)</FONT>;
+		  stack.push<FONT COLOR="#444444">(</FONT>i<FONT COLOR="#444444">)</FONT>;
+		<FONT COLOR="#444444">}</FONT>
+
+	      hi = j;
+	    <FONT COLOR="#444444">}</FONT>
+	<FONT COLOR="#444444">}</FONT>
+      <FONT COLOR="BROWN"><STRONG>while</STRONG></FONT> <FONT COLOR="#444444">(</FONT>!stack.isEmpty<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT><FONT COLOR="#444444">)</FONT>;
+
+      <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> a;
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+
+  
+</PRE>
+<HR>
+<CENTER>
+<TABLE BGCOLOR="WHITE" WIDTH=90% BORDER=1 CELLPADDING=10>
+<TR><TD><FONT COLOR="BLACK">
+
+    An empty iterator that may come handy.
+   
+</FONT></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<PRE>
+
+  <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT> <FONT COLOR="GREEN">EMPTY_ITERATOR</FONT> = <FONT COLOR="BROWN"><STRONG>new</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>EmptyIterator</STRONG></FONT><FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>;
+
+  <FONT COLOR="PURPLE"><STRONG>private</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>static</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>class</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>EmptyIterator</STRONG></FONT> <FONT COLOR="BROWN"><STRONG>implements</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Iterator</STRONG></FONT>
+    <FONT COLOR="#444444">{</FONT>
+      <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>boolean</STRONG></FONT> hasNext<FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">false</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+    <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="#4400DD"><STRONG>Object</STRONG></FONT> next <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+	  <FONT COLOR="BROWN"><STRONG>return</STRONG></FONT> <FONT COLOR="GREEN">null</FONT>;
+	<FONT COLOR="#444444">}</FONT>
+
+    <FONT COLOR="PURPLE"><STRONG>public</STRONG></FONT> <FONT COLOR="PURPLE"><STRONG>final</STRONG></FONT> <FONT COLOR="BLUE"><STRONG>void</STRONG></FONT> remove <FONT COLOR="#444444">(</FONT><FONT COLOR="#444444">)</FONT>
+        <FONT COLOR="#444444">{</FONT>
+	<FONT COLOR="#444444">}</FONT>
+    <FONT COLOR="#444444">}</FONT>
+
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+  
+  <FONT COLOR="#88AA66"><EM>// /**
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//  * This creates a single generic cloner for any object using the
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//  * deepClone(Object) and deepClone(Object) methods.
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//  */
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>// private static Cloner cloner = new Cloner();
+</EM></FONT>
+  <FONT COLOR="#88AA66"><EM>// /**
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//  * Returns a shallow clone copy of the given object.
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//  */
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>// public static Object shallowClone (Object o)
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//   {
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//     return cloner.shallowClone(o);
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//   }    
+</EM></FONT>
+  <FONT COLOR="#88AA66"><EM>// /**
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//  * Returns a deep clone copy of the given object.
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//  */
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>// public static Object deepClone (Object o)
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//   {
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//     return cloner.deepClone(o);
+</EM></FONT>  <FONT COLOR="#88AA66"><EM>//   }    
+</EM></FONT>
+  <FONT COLOR="#88AA66"><EM>/* ************************************************************************ */</EM></FONT>
+<FONT COLOR="#444444">}</FONT>
+
+</PRE>
+<P>
+<HR>
+<P ALIGN="RIGHT"><FONT COLOR="#F07070"><EM>
+This file was generated on Thu Jan 30 10:08:49 CET 2014 from file <FONT COLOR="BROWN"><KBD>Misc.java</KBD></FONT><BR>by the <FONT COLOR="BROWN"><KBD>hlt.language.tools.Hilite</KBD></FONT> Java tool written by <A HREF="mailto:hak@acm.org">Hassan A&iuml;t-Kaci</A></EM></FONT>
+<P>
+<HR>
+</BODY>
+</HTML>
